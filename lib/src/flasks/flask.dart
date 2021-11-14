@@ -49,4 +49,6 @@ abstract class Flask extends Bloc<Ingredient, Potion> with Tap {
 
   @protected
   Potion? onDrip(PipeContext context);
+
+  T? lookup<T extends Flask>() => this is T ? this as T : null;
 }

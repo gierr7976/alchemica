@@ -22,4 +22,14 @@ abstract class MultiChildFlask extends Flask {
   void _childrenDripper() {
     for (Flask flask in children) flask.dripper(context);
   }
+
+  @override
+  T? lookup<T extends Flask>() {
+    if (this is T) return this as T;
+
+    for (Flask flask in children) {
+      T? inChildren = flask.lookup();
+      if (inChildren != null) return inChildren;
+    }
+  }
 }

@@ -20,4 +20,11 @@ abstract class SinglePipeFlask extends Flask {
   }
 
   void _childDripper() => child.dripper(context);
+
+  @override
+  T? lookup<T extends Flask>() {
+    if (this is T) return this as T;
+
+    return child.lookup();
+  }
 }
