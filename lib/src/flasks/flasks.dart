@@ -11,4 +11,6 @@ import 'package:meta/meta.dart';
 
 part 'flask.dart';
 part 'ingredients.dart';
+part 'piped/multi.dart';
+part 'piped/single.dart';
 part 'potions.dart';
