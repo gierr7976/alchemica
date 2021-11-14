@@ -38,6 +38,15 @@ abstract class LabState extends State<Lab> {
 
   void buildPiping();
 
+  T lookup<T extends Flask>() {
+    T? fromPiping = _lookup();
+
+    if (fromPiping == null) throw LookupError(T);
+    return fromPiping;
+  }
+
+  T? _lookup<T extends Flask>();
+
   @override
   Widget build(BuildContext context) => widget.child;
 }
