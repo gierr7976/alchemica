@@ -5,17 +5,20 @@ class Alchemist<F extends Flask, B extends BrewedPotion>
   final DrinkerBuilder<UnderbrewedPotion> underbrewedDrinker;
   final DrinkerBuilder<B> brewedDrinker;
   final DrinkerBuilder<PoisonedPotion> poisonedDrinker;
+  final BlocBuilderCondition<Potion>? drinkWhen;
 
   const Alchemist({
     Key? key,
     required this.underbrewedDrinker,
     required this.brewedDrinker,
     required this.poisonedDrinker,
+    this.drinkWhen,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => BlocBuilder<F, Potion>(
         bloc: Lab.of(context).lookup(),
+        buildWhen: drinkWhen ?? (_, __) => true,
         builder: _map,
       );
 

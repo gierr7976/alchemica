@@ -5,22 +5,30 @@ typedef SnifferFunction<P extends Potion> = void Function(
 
 class Sniffer<F extends Flask, P extends Potion> extends StatelessWidget {
   final Widget child;
-  final SnifferFunction sniffer;
+  final SnifferFunction<P> sniffer;
+  final BlocBuilderCondition<P>? sniffWhen;
 
   const Sniffer({
     Key? key,
     required this.child,
     required this.sniffer,
+    this.sniffWhen,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => BlocListener<F, Potion>(
         bloc: Lab.of(context).lookup(),
-        listener: _listener,
+        listener: (context, potion) => sniffer(context, potion as P),
+        listenWhen: _listenWhen,
         child: child,
       );
 
-  void _listener(BuildContext context, Potion potion) {
-    if (potion is P) sniffer(context, potion);
+  bool _listenWhen(Potion previous, Potion current) {
+    if (current is! P)
+      throw StateError('Incorrect potion: ${current.runtimeType}');
+    if (sniffWhen == null) return true;
+    if (previous is! P) return true;
+
+    return sniffWhen!(previous, current);
   }
 }
