@@ -1,9 +1,9 @@
 part of flasks;
 
 abstract class SinglePipeFlask extends Flask {
-  final Flask child;
+  final Flask? child;
 
-  SinglePipeFlask({required this.child});
+  SinglePipeFlask({this.child});
 
   @override
   void dripper([PipeContext? nearestUpstreamContext]) {
@@ -19,12 +19,12 @@ abstract class SinglePipeFlask extends Flask {
     _childDripper();
   }
 
-  void _childDripper() => child.dripper(context);
+  void _childDripper() => child?.dripper(context);
 
   @override
   T? lookup<T extends Flask>() {
     if (this is T) return this as T;
 
-    return child.lookup();
+    return child?.lookup();
   }
 }

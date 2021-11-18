@@ -1,9 +1,9 @@
 part of flasks;
 
-abstract class MultiChildFlask extends Flask {
+abstract class MultiPipeFlask extends Flask {
   final List<Flask> children;
 
-  MultiChildFlask({required this.children});
+  MultiPipeFlask({this.children = const []});
 
   @override
   void dripper([PipeContext? nearestUpstreamContext]) {
