@@ -11,10 +11,9 @@ abstract class Explosion {
 }
 
 abstract class ExpectedExplosion extends Explosion {
-  final int code;
+  int get code;
 
   const ExpectedExplosion({
-    required this.code,
     required Object explosion,
     required StackTrace stackTrace,
   }) : super(
