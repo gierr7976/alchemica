@@ -21,7 +21,7 @@ mixin Tap {
   /// it updates.
   @protected
   void dripper([PipeContext? nearestUpstreamContext]) {
-    _context = PipeContext(
+    _context = PipeContext._(
       currentTap: this,
       nearestUpstreamContext: nearestUpstreamContext,
     );

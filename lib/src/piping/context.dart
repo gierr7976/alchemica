@@ -8,7 +8,7 @@ class PipeContext {
   /// Default constructor.
   ///
   /// Does not meant to be used outside [piping] library.
-  const PipeContext({
+  const PipeContext._({
     required Tap currentTap,
     PipeContext? nearestUpstreamContext,
   })  : _nearestUpstreamContext = nearestUpstreamContext,
