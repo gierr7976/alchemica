@@ -1,3 +1,4 @@
+/// Explosion feature library.
 library explosions;
 
 export 'explosion/explosion.dart';
