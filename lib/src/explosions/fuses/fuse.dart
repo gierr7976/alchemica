@@ -27,15 +27,12 @@ abstract class Fuse {
   /// If [enabled] is [false], always returns null or rethrows an [Object] from
   /// [operation].
   OccasionalExplosion? fuse(Operation operation) {
-    if (!enabled) {
-      operation();
-      return null;
-    }
-
     try {
       operation();
       return null;
     } catch (e, s) {
+      if (!enabled) rethrow;
+
       return OccasionalExplosion(
         explosion: e,
         stackTrace: s,
@@ -52,15 +49,12 @@ abstract class Fuse {
   /// If [enabled] is [false], always returns null or rethrows an [Object] from
   /// [operation].
   Future<OccasionalExplosion?> fuseAsync(AsyncOperation operation) async {
-    if (!enabled) {
-      await operation();
-      return null;
-    }
-
     try {
       await operation();
       return null;
     } catch (e, s) {
+      if (!enabled) rethrow;
+
       return OccasionalExplosion(
         explosion: e,
         stackTrace: s,
