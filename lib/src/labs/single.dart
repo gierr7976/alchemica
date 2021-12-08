@@ -6,6 +6,7 @@ class _SinglePipeLabState extends LabState {
   @override
   void buildPiping() {
     piping ??= widget.builder!();
+    piping!.dripper(); // ignore: invalid_use_of_protected_member
   }
 
   @override

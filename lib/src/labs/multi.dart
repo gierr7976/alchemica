@@ -6,6 +6,8 @@ class _MultiPipeLabState extends LabState {
   @override
   void buildPiping() {
     piping ??= widget.multiBuilder!();
+    for (Flask flask in piping!)
+      flask.dripper(); // ignore: invalid_use_of_protected_member
   }
 
   @override
