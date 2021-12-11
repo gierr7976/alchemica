@@ -15,7 +15,14 @@ abstract class Flask extends PipedBloc<Ingredient, Potion> {
           initialState ?? UnderbrewedPotion(),
           label: label,
           child: child,
-        );
+        ) {
+    use<DrippedIngredient>(onDrippedIngredient);
+  }
+
+  @protected
+  Future<void> onDrippedIngredient(
+          DrippedIngredient ingredient, Emitter emit) async =>
+      emit(ingredient.dripped);
 
   @override
   DrippedIngredient produceDripEvent(Potion dripped) =>
