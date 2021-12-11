@@ -19,20 +19,15 @@ void main() => group(
 //<editor-fold desc="Mock classes">
 
 class MockFlaskA extends Flask {
-  @override
-  Potion? onDrip(PipeContext context) => null;
+  // Intentionally left blank
 }
 
 class MockFlaskB extends Flask {
-  @override
-  Potion? onDrip(PipeContext context) => null;
+  // Intentionally left blank
 }
 
 class MockFlaskC extends Flask {
   MockFlaskC([Pipe? child]) : super(child: child);
-
-  @override
-  Potion? onDrip(PipeContext context) => null;
 }
 
 class BrewedMock extends BrewedPotion {
