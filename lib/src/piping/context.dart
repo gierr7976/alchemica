@@ -14,6 +14,12 @@ class PipeContext {
         _current = current,
         _predecessors = predecessors ?? const {};
 
+  PipeContext derivative(Pipe child) => PipeContext._(
+        current: child,
+        ancestorContext: this,
+        predecessors: _predecessors,
+      );
+
   T? lookup<T extends Pipe>() =>
       _current is T ? _current as T : _ancestorContext?.lookup();
 
