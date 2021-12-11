@@ -1,8 +1,4 @@
-library fuses;
-
-import 'dart:async';
-
-import 'package:alchemica/src/explosions/explosion/explosion.dart';
+part of alchemica.explosions;
 
 /// Shorthand for executions that can be fused by [Fuse].
 typedef Operation = void Function();

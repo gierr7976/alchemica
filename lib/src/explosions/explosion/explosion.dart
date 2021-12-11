@@ -1,4 +1,4 @@
-library explosion;
+part of alchemica.explosions;
 
 /// Base explosion class.
 ///
