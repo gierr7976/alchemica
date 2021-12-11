@@ -12,6 +12,7 @@ void main() => group(
         setUpAll(set);
         init();
         fork();
+        mutation();
       },
     );
 
@@ -28,6 +29,8 @@ class MockFlaskB extends Flask {
 }
 
 class MockFlaskC extends Flask {
+  MockFlaskC([Pipe? child]) : super(child: child);
+
   @override
   Potion? onDrip(PipeContext context) => null;
 }
@@ -45,7 +48,7 @@ class MockFuse extends Fuse {
   int reportExplosion(Object explosion, StackTrace stackTrace) => -42;
 }
 
-class RecipeInit extends Recipe {
+class RecipeA extends Recipe {
   @override
   Pipe prepareLab() => MockFlaskA();
 }
@@ -60,6 +63,13 @@ class RecipeFork extends Recipe {
       );
 }
 
+class RecipeB extends Recipe {
+  @override
+  Pipe prepareLab() => MockFlaskC(
+        MockFlaskA(),
+      );
+}
+
 //</editor-fold>
 
 void set() {
@@ -71,14 +81,14 @@ void init() => testWidgets(
       (tester) async {
         await tester.pumpWidget(
           Lab(
-            recipe: RecipeInit(),
+            recipe: RecipeA(),
             child: SizedBox(),
           ),
         );
 
         LabState lab = tester.state(find.byType(Lab));
 
-        MockFlaskA? flask = lab.find<RecipeInit, MockFlaskA>();
+        MockFlaskA? flask = lab.find<RecipeA, MockFlaskA>();
 
         expect(flask, isNotNull);
       },
@@ -101,5 +111,36 @@ void fork() => testWidgets(
 
         MockFlaskB? flaskB = lab.find<RecipeFork, MockFlaskB>();
         expect(flaskB, isNotNull);
+      },
+    );
+
+void mutation() => testWidgets(
+      'Mutation test',
+      (tester) async {
+        await tester.pumpWidget(
+          Lab(
+            recipe: RecipeA(),
+            child: SizedBox(),
+          ),
+        );
+
+        LabState lab = tester.state(find.byType(Lab));
+
+        MockFlaskA? flaskA = lab.find<RecipeA, MockFlaskA>();
+        expect(flaskA, isNotNull);
+
+        flaskA!.add(DrippedIngredient(BrewedMock(2)));
+
+        await tester.pump();
+
+        lab.prepare(RecipeB());
+
+        await tester.pump();
+
+        flaskA = lab.find<RecipeB, MockFlaskA>();
+        expect(flaskA, isNotNull);
+        expect(flaskA!.state is BrewedMock, true);
+        BrewedMock potion = flaskA.state as BrewedMock;
+        expect(potion.value, 2);
       },
     );
