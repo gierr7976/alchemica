@@ -6,7 +6,7 @@ abstract class Pipe {
   @protected
   void drip(PipeContext context);
 
-  T? find<T extends Pipe>();
+  T? find<T extends Pipe>([Label? label]);
 
   Map<Label, Pipe> extract();
 }
