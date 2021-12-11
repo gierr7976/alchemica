@@ -1,8 +1,9 @@
 part of alchemica.piping;
 
-abstract class RootPipe extends Pipe {
+class RootPipe implements Pipe {
   @override
-  Label get label => Label.type(this);
+  Label get label =>
+      throw UnimplementedError('Root pipe should not have labels');
 
   Pipe? _child;
 
@@ -12,7 +13,6 @@ abstract class RootPipe extends Pipe {
   @override
   Map<Label, Pipe> extract() => _child!.extract();
 
-  @protected
   void updateChild(Pipe newChild) {
     Map<Label, Pipe>? oldTreeMap = _child?.extract();
 
@@ -26,5 +26,6 @@ abstract class RootPipe extends Pipe {
   }
 
   @override
-  void drip(PipeContext context) => UnimplementedError("Root pipe can't drip");
+  void drip(PipeContext context) =>
+      throw UnimplementedError("Root pipe can't drip");
 }
