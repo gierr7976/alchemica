@@ -6,6 +6,7 @@ import 'package:alchemica/src/labs/lib.dart';
 import 'package:alchemica/src/piping/lib.dart';
 import 'package:flutter/widgets.dart';
 
+part 'alarm.dart';
 part 'case.dart';
 part 'defs.dart';
 part 'extractor.dart';
