@@ -8,5 +8,6 @@ abstract class Pipe {
 
   T? find<T extends Pipe>([Label? label]);
 
+  @protected
   Map<Label, Pipe> extract();
 }
