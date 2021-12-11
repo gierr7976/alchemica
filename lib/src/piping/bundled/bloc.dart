@@ -36,9 +36,14 @@ abstract class PipedBloc<E, S> extends Bloc<E, S> implements Pipe {
   }
 
   @override
+  void dispose() async {
+    await close();
+    onDispose();
+  }
+
+  @override
   Future<void> close() async {
     await _selfSubscription?.cancel();
-    onDispose();
     return super.close();
   }
 

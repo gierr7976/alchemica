@@ -43,6 +43,12 @@ class LabState extends State<Lab> {
 
   @override
   Widget build(BuildContext context) => widget.child;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _root.dispose();
+  }
 }
 
 class RecipeError<R extends Recipe, F extends Flask> extends StateError {

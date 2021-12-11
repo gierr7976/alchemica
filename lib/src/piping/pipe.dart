@@ -10,4 +10,6 @@ abstract class Pipe {
 
   @protected
   Map<Label, Pipe> extract();
+
+  void dispose();
 }

@@ -28,4 +28,9 @@ class RootPipe implements Pipe {
   @override
   void drip(PipeContext context) =>
       throw UnimplementedError("Root pipe can't drip");
+
+  @override
+  void dispose() {
+    _child?.dispose();
+  }
 }

@@ -34,4 +34,9 @@ class Fork extends Pipe {
       if (fromChild is T) return fromChild;
     }
   }
+
+  @override
+  void dispose() {
+    for (Pipe child in children) child.dispose();
+  }
 }
