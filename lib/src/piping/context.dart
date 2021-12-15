@@ -14,7 +14,7 @@ class PipeContext {
         _current = current,
         _predecessors = predecessors ?? const {};
 
-  PipeContext derivative(Pipe child, {bool dropPredecessors = false}) =>
+  PipeContext _derivative(Pipe child, {bool dropPredecessors = false}) =>
       PipeContext._(
         current: child,
         ancestorContext: this,
