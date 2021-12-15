@@ -73,9 +73,9 @@ abstract class PipedBloc<E, S> extends Bloc<E, S> implements Pipe {
 
   @override
   T? find<T extends Pipe>([Label? label]) {
-    final Label maybeThisLabel = label ?? this.label;
+    final Label exactLabel = label ?? this.label;
 
-    if (this is T && this.label == maybeThisLabel) return this as T;
+    if (this is T && this.label == exactLabel) return this as T;
 
     return child?.find(label);
   }
