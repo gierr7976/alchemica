@@ -23,6 +23,9 @@ abstract class Explosion extends Error {
 /// Base [Explosion] class for any normal failures expected by developer.
 ///
 /// Feel free to extend this class to provide info about failure you expected.
+///
+/// Throwing an ExpectedExplosion is a good point to deal
+/// with some expected problems, e.g deprecated app version.
 abstract class ExpectedExplosion extends Explosion {
   /// Client designed code of explosion
   ///
