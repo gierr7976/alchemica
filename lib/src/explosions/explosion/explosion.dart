@@ -6,7 +6,7 @@ part of alchemica.explosions;
 /// should be wrapped by explosion.
 ///
 /// This class does not meant to be extended outside [alchemica].
-abstract class Explosion {
+abstract class Explosion extends Error {
   /// Failure itself.
   final Object explosion;
 
@@ -14,7 +14,7 @@ abstract class Explosion {
   final StackTrace stackTrace;
 
   /// Default constructor.
-  const Explosion({
+  Explosion({
     required this.explosion,
     required this.stackTrace,
   });
@@ -31,7 +31,7 @@ abstract class ExpectedExplosion extends Explosion {
   int get code;
 
   /// Default constructor.
-  const ExpectedExplosion({
+  ExpectedExplosion({
     required Object explosion,
     required StackTrace stackTrace,
   }) : super(
@@ -50,7 +50,7 @@ class OccasionalExplosion extends Explosion {
   final int reportCode;
 
   /// Default constructor. Shall not be called outside [alchemica] package.
-  const OccasionalExplosion({
+  OccasionalExplosion({
     required this.reportCode,
     required Object explosion,
     required StackTrace stackTrace,
