@@ -36,7 +36,7 @@ abstract class Flask extends PipedBloc<Ingredient, Potion> {
   ]) {
     on<I>(
       (event, emit) async {
-        OccasionalExplosion? poisoner = await fuse.fuseAsync(
+        Explosion? poisoner = await fuse.fuseAsync(
           () => magic(event, emit),
         );
 
