@@ -17,6 +17,7 @@ class Fork extends Pipe {
     for (Pipe child in children) child.drip(context.derivative(child));
   }
 
+  // TODO: add unit test
   @override
   Map<Label, Pipe> extract() => {
         label: this,
@@ -33,5 +34,10 @@ class Fork extends Pipe {
       final T? fromChild = child.find(label);
       if (fromChild is T) return fromChild;
     }
+  }
+
+  @override
+  void dispose() {
+    for (Pipe child in children) child.dispose();
   }
 }

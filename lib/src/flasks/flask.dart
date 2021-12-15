@@ -15,12 +15,20 @@ abstract class Flask extends PipedBloc<Ingredient, Potion> {
           initialState ?? UnderbrewedPotion(),
           label: label,
           child: child,
-        );
+        ) {
+    use<DrippedIngredient>(onDrippedIngredient);
+  }
+
+  @protected
+  Future<void> onDrippedIngredient(
+          DrippedIngredient ingredient, Emitter emit) async =>
+      emit(ingredient.dripped);
 
   @override
   DrippedIngredient produceDripEvent(Potion dripped) =>
       DrippedIngredient(dripped);
 
+  // TODO: add fusing unit test
   @protected
   void use<I extends Ingredient>(
     Magic<I> magic, [
@@ -39,5 +47,13 @@ abstract class Flask extends PipedBloc<Ingredient, Potion> {
       },
       transformer: transformer,
     );
+  }
+
+  @override
+  @mustCallSuper
+  Potion? onDrip(PipeContext context) {
+    Flask? predecessor = context.predecessorWith(label);
+
+    if (predecessor is Flask) return predecessor.state;
   }
 }
