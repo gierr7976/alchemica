@@ -28,6 +28,7 @@ abstract class Flask extends PipedBloc<Ingredient, Potion> {
   DrippedIngredient produceDripEvent(Potion dripped) =>
       DrippedIngredient(dripped);
 
+  // TODO: add fusing unit test
   @protected
   void use<I extends Ingredient>(
     Magic<I> magic, [

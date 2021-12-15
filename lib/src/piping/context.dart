@@ -21,7 +21,7 @@ class PipeContext {
         predecessors: dropPredecessors ? null : _predecessors,
       );
 
-  T? lookup<T extends Pipe>() =>
+  T? lookup<T extends Pipe>() => // TODO: add unit test
       _current is T ? _current as T : _ancestorContext?.lookup();
 
   T? predecessorWith<T extends Pipe>([Label? label]) {
