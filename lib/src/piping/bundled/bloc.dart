@@ -29,7 +29,7 @@ abstract class PipedBloc<E, S> extends Bloc<E, S> implements Pipe {
   // TODO: add unit test
   void _selfListener(S state) {
     if (_latestContext is PipeContext && child is Pipe)
-      child!.drip(_latestContext!.derivative(child!, dropPredecessors: true));
+      child!.drip(_latestContext!._derivative(child!, dropPredecessors: true));
   }
 
   void onDispose() {
@@ -56,7 +56,7 @@ abstract class PipedBloc<E, S> extends Bloc<E, S> implements Pipe {
   @mustCallSuper
   void drip(PipeContext context) {
     _latestContext = context;
-    if (child is Pipe) child!.drip(context.derivative(child!));
+    if (child is Pipe) child!.drip(context._derivative(child!));
 
     final Bloc<E, S>? predecessor = context.predecessorWith(label);
     if (predecessor is Bloc<E, S>) add(produceDripEvent(predecessor.state));

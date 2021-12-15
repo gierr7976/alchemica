@@ -2,6 +2,7 @@ library alchemica.piping;
 
 import 'dart:async';
 
+import 'package:alchemica/src/flasks/lib.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 

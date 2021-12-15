@@ -14,7 +14,7 @@ class Fork extends Pipe {
 
   @override
   void drip(PipeContext context) {
-    for (Pipe child in children) child.drip(context.derivative(child));
+    for (Pipe child in children) child.drip(context._derivative(child));
   }
 
   // TODO: add unit test

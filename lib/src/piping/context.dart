@@ -1,11 +1,24 @@
 part of alchemica.piping;
 
+/// Surrounding of [Pipe] in logic tree.
+///
+/// Provides access to upstream [Pipe]s and predecessors.
 @immutable
 class PipeContext {
+  /// Context of ancestor.
+  ///
+  /// Should be provided if current element is child of other element.
   final PipeContext? _ancestorContext;
+
+  /// Current logic tree element itself.
   final Pipe _current;
+
+  /// All items preserved after latest tree mutation.
+  ///
+  /// Intended be provided at once immediately after tree mutation.
   final Map<Label, Pipe> _predecessors;
 
+  /// Internal constructor.
   const PipeContext._({
     required Pipe current,
     PipeContext? ancestorContext,
@@ -14,6 +27,7 @@ class PipeContext {
         _current = current,
         _predecessors = predecessors ?? const {};
 
+  /// Creates derivative context to drip child.
   PipeContext _derivative(Pipe child, {bool dropPredecessors = false}) =>
       PipeContext._(
         current: child,
