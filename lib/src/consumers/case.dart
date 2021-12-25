@@ -22,10 +22,11 @@ class PotionCase<R extends Recipe, F extends Flask> extends StatelessWidget
   Widget build(BuildContext context) => BlocBuilder<F, Potion>(
         bloc: extractFlask(context),
         buildWhen: buildWhen,
-        builder: _mapper,
+        builder: mapper,
       );
 
-  Widget _mapper(BuildContext context, Potion potion) {
+  @protected
+  Widget mapper(BuildContext context, Potion potion) {
     if (potion is UnderbrewedPotion) return underbrewed(context, potion);
 
     if (potion is BrewedPotion) return brewed(context, potion);
