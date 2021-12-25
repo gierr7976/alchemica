@@ -23,6 +23,7 @@ class SelectiveCase<R extends Recipe, F extends Flask, P extends Potion>
         builder: mapper,
       );
 
+  @protected
   Widget mapper(BuildContext context, Potion potion) {
     if (potion is P) return builder(context, potion);
 
