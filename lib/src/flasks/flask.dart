@@ -19,6 +19,8 @@ abstract class Flask extends PipedBloc<Ingredient, Potion> {
     use<DrippedIngredient>(onDrippedIngredient);
   }
 
+  // TODO: add dripping test
+
   @protected
   Future<void> onDrippedIngredient(
           DrippedIngredient ingredient, Emitter emit) async =>
