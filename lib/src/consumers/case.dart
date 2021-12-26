@@ -1,12 +1,12 @@
 part of alchemica.consumers;
 
-class PotionCase<R extends Recipe, F extends Flask> extends StatelessWidget
-    with FlaskExtractor<R, F> {
+class PotionCase<R extends Recipe, F extends Flask, B extends BrewedPotion>
+    extends StatelessWidget with FlaskExtractor<R, F> {
   @override
   final Label? label;
   final AlchemicaCondition? buildWhen;
   final AlchemicaWidgetBuilder<UnderbrewedPotion> underbrewed;
-  final AlchemicaWidgetBuilder<BrewedPotion> brewed;
+  final AlchemicaWidgetBuilder<B> brewed;
   final AlchemicaWidgetBuilder<PoisonedPotion> poisoned;
 
   const PotionCase({
@@ -29,7 +29,7 @@ class PotionCase<R extends Recipe, F extends Flask> extends StatelessWidget
   Widget mapper(BuildContext context, Potion potion) {
     if (potion is UnderbrewedPotion) return underbrewed(context, potion);
 
-    if (potion is BrewedPotion) return brewed(context, potion);
+    if (potion is B) return brewed(context, potion);
 
     if (potion is PoisonedPotion) return poisoned(context, potion);
 
