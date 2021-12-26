@@ -35,7 +35,6 @@ class LabState extends State<Lab> {
     _currentRecipe = recipe;
   }
 
-  // TODO: add unit test for Recipe mismatch
   F? find<R extends Recipe, F extends Flask>([Label? label]) {
     if (_currentRecipe is! R) throw RecipeError<R, F>(_currentRecipe);
 
