@@ -35,8 +35,14 @@ class PipeContext {
         predecessors: dropPredecessors ? null : _predecessors,
       );
 
-  T? lookup<T extends Pipe>() => // TODO: add unit test
-      _current is T ? _current as T : _ancestorContext?.lookup();
+  // TODO: add unit test
+  T? lookup<T extends Pipe>([Label? label]) {
+    final Label exactLabel = label ?? _current.label;
+
+    if(_current is T && _current.label == exactLabel) return _current as T;
+
+    return _ancestorContext?.lookup(label);
+  }
 
   T? predecessorWith<T extends Pipe>([Label? label]) {
     for (MapEntry entry in _predecessors.entries)
