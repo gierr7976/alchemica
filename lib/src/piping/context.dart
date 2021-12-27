@@ -36,6 +36,9 @@ class PipeContext {
       );
 
   // TODO: add unit test
+  /// Searches for [Pipe] matching given conditions.
+  ///
+  /// Returns [null] if nothing found.
   T? lookup<T extends Pipe>([Label? label]) {
     final Label exactLabel = label ?? _current.label;
 
@@ -44,6 +47,9 @@ class PipeContext {
     return _ancestorContext?.lookup(label);
   }
 
+  /// Searches for predecessor [Pipe] matching given conditions.
+  ///
+  /// Returns [null] if nothing found.
   T? predecessorWith<T extends Pipe>([Label? label]) {
     for (MapEntry entry in _predecessors.entries)
       if (entry.key == (label ?? entry.key) && entry.value is T)
