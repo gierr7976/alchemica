@@ -14,7 +14,7 @@ abstract class Pipe {
   @protected
   void drip(PipeContext context);
 
-  /// Matches itself and downstream elements with given condition.
+  /// Searches elements by given condition.
   ///
   /// Returns first matching element.
   T? find<T extends Pipe>([Label? label]);
@@ -24,6 +24,6 @@ abstract class Pipe {
   @protected
   Map<Label, Pipe> extract();
 
-  /// Handles disposing of logic tree.
+  /// Handles disposing of current logic tree.
   void dispose();
 }
