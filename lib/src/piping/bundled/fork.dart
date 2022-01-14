@@ -1,12 +1,19 @@
 part of alchemica.piping;
 
+/// A [Pipe] element containing multiple downstream elements.
 class Fork extends Pipe {
+  /// Label given with constructor.
   final Label? _label;
+
+  /// Downstream elements of this element.
+  ///
+  /// *Note: [children] is not preserved over logic tree mutations.*
   final List<Pipe> children;
 
   @override
   Label get label => _label ?? Label.type(this);
 
+  /// Default constructor.
   Fork({
     Label? label,
     required this.children,
