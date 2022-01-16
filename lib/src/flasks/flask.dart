@@ -27,8 +27,7 @@ abstract class Flask extends PipedBloc<Ingredient, Potion> {
       emit(ingredient.dripped);
 
   @override
-  DrippedIngredient produceDripEvent(Potion dripped) =>
-      DrippedIngredient(dripped);
+  void dripState(Potion dripped) => add(DrippedIngredient(dripped));
 
   @protected
   void use<I extends Ingredient>(

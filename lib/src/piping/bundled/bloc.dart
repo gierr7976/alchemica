@@ -58,15 +58,12 @@ abstract class PipedBloc<E, S> extends Bloc<E, S> implements Pipe {
     if (child is Pipe) child!.drip(context._derivative(child!));
 
     final Bloc<E, S>? predecessor = context.predecessorWith(label);
-    if (predecessor is Bloc<E, S>) add(produceDripEvent(predecessor.state));
-
-    final S? dripped = onDrip(context);
-    if (dripped is S) add(produceDripEvent(dripped));
+    if (predecessor is Bloc<E, S>) dripState(predecessor.state);
   }
 
-  E produceDripEvent(S dripped);
-
-  S? onDrip(PipeContext context);
+  /// Sets [dripped] as a state of [PipedBloc].
+  @protected
+  void dripState(S dripped);
 
   //</editor-fold>
 
