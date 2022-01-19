@@ -134,6 +134,9 @@ void mutation() => testWidgets(
 
         flaskA = lab.find<RecipeB, MockFlaskA>();
         expect(flaskA, isNotNull);
+
+        await tester.pump();
+
         expect(flaskA!.state is BrewedMock, true);
         BrewedMock potion = flaskA.state as BrewedMock;
         expect(potion.value, 2);

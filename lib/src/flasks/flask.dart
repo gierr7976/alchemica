@@ -48,12 +48,4 @@ abstract class Flask extends PipedBloc<Ingredient, Potion> {
       transformer: transformer,
     );
   }
-
-  @override
-  @mustCallSuper
-  Potion? onDrip(PipeContext context) {
-    Flask? predecessor = context.predecessorWith(label);
-
-    if (predecessor is Flask) return predecessor.state;
-  }
 }
