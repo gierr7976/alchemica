@@ -3,11 +3,17 @@ part of alchemica.piping;
 abstract class Pipe with Labelable {
   Potion? get potion => null;
 
+  //<editor-fold desc="Lifecycle methods">
+
   void install(PipeContext context);
 
   void pass(Ingredient ingredient);
 
   void uninstall();
+
+  //</editor-fold>
+
+  //<editor-fold desc="Extraction methods">
 
   P? _conditional<P extends Pipe>([Label? label]) {
     if (this is P) {
@@ -26,4 +32,6 @@ abstract class Pipe with Labelable {
   Map<Label, Potion> collect() => {
         if (potion is Potion) label: potion!,
       };
+
+  //</editor-fold>
 }
