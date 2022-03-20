@@ -34,7 +34,8 @@ abstract class Flask extends Pipe {
 
   void uses();
 
-  Potion brewInitial(PipeContext context) => UnderbrewedPotion();
+  Potion brewInitial(PipeContext context) =>
+      context.getPreserved(label) ?? UnderbrewedPotion();
 
   @protected
   void use<I extends Ingredient>(
