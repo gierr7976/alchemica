@@ -2,7 +2,7 @@ part of alchemica.flasks;
 
 typedef Magic<I extends Ingredient> = FutureOr<void> Function(
   I ingredient,
-  Emitter<Potion> emitter,
+  Emitter<Potion> emit,
 );
 
 typedef MutationCallback = void Function(Potion potion);
@@ -10,6 +10,8 @@ typedef MutationCallback = void Function(Potion potion);
 class FlaskBloc extends Bloc<Ingredient, Potion> {
   @protected
   final MutationCallback onMutation;
+
+  Fuse get fuse => GetIt.instance();
 
   StreamSubscription? _selfSubscription;
 
@@ -21,10 +23,17 @@ class FlaskBloc extends Bloc<Ingredient, Potion> {
   void use<I extends Ingredient>(
     Magic<I> magic,
     EventTransformer<I>? transformer,
-  ) {
-    // TODO: add fusing
-    on<I>(magic, transformer: transformer);
-  }
+  ) =>
+      on<I>(
+        (ingredient, emit) async {
+          final PoisonedPotion? poisoned = await fuse.fuseAsync(
+            () => magic(ingredient, emit),
+          );
+
+          if (poisoned is PoisonedPotion) emit(poisoned);
+        },
+        transformer: transformer,
+      );
 
   @mustCallSuper
   void install() {
