@@ -1,11 +1,12 @@
 part of alchemica.consumers;
 
-abstract class Pourer<F extends Flask> extends StatelessWidget {
-  static Widget defaultFallback(BuildContext context) => SizedBox();
-
+class Pourer<F extends Flask> extends StatelessWidget {
   final Label? label;
-  final WidgetBuilder fallback;
-  final bool strict;
+  final WidgetBuilder? onMissing;
+  final Rule rule;
+
+  @protected
+  bool get strict => onMissing == null;
 
   F? getFlask(BuildContext context) {
     final LabState lab = Lab.of(context);
@@ -17,8 +18,8 @@ abstract class Pourer<F extends Flask> extends StatelessWidget {
   const Pourer({
     Key? key,
     this.label,
-    this.fallback = defaultFallback,
-    this.strict = true,
+    required this.rule,
+    this.onMissing,
   }) : super(key: key);
 
   @override
@@ -27,12 +28,10 @@ abstract class Pourer<F extends Flask> extends StatelessWidget {
 
     if (flask is F)
       return BlocBuilder<FlaskBloc, Potion>(
-        bloc: getFlask(context)?.bloc,
-        builder: forPotion,
+        bloc: getFlask(context)!.bloc,
+        builder: rule.map,
       );
 
-    return fallback(context);
+    return onMissing!(context);
   }
-
-  Vial forPotion(BuildContext context, Potion potion);
 }
