@@ -60,7 +60,16 @@ class LabState extends State<Lab> {
     _rootElement!.pass(ingredient);
   }
 
-  void rebuildRecipe() => _recipe.build();
+  void rebuildRecipe() {
+    final Map<Label, Potion>? preserved = _rootElement?.collect();
+    _rootElement = _recipe.build();
+    _rootElement!.install(
+      PipeContext(
+        current: _rootElement!,
+        preserved: preserved,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) => widget.child;
