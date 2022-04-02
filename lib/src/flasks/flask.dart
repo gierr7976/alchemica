@@ -11,7 +11,7 @@ abstract class Flask extends Pipe {
 
   final Label? _label;
 
-  final List<Type> _usedIngredients = [];
+  final List<IngredientScanner> _scanners = [];
 
   Flask({
     Label? label,
@@ -25,17 +25,22 @@ abstract class Flask extends Pipe {
 
     bloc = FlaskBloc(initial: brewInitial(context), onMutation: onMutation);
 
-    uses();
+    usages();
   }
 
+  @protected
   void dependencies(PipeContext context) {
     // Intentionally left blank
   }
 
-  void uses();
+  @protected
+  void usages();
 
+  @protected
   Potion brewInitial(PipeContext context) =>
       context.getPreserved(label) ?? UnderbrewedPotion();
+
+  //<editor-fold desc="Usage binders">
 
   @protected
   void use<I extends Ingredient>(
@@ -44,9 +49,21 @@ abstract class Flask extends Pipe {
   }) {
     shallBeInstalled();
 
-    _usedIngredients.add(I);
+    _scanners.add(IngredientScanner<I>());
     bloc!.use(magic, transformer);
   }
+
+  void useDripped<D extends Pipe, P extends Potion>(
+    Magic<DrippedIngredient> magic, {
+    EventTransformer<DrippedIngredient>? transformer,
+  }) {
+    shallBeInstalled();
+
+    _scanners.add(DrippedIngredientScanner<D, P>());
+    bloc!.use(magic, transformer);
+  }
+
+  //</editor-fold>
 
   //</editor-fold>
 
@@ -61,8 +78,11 @@ abstract class Flask extends Pipe {
   void pass(Ingredient ingredient) {
     shallBeInstalled();
 
-    if (_usedIngredients.contains(ingredient.runtimeType))
-      bloc!.add(ingredient);
+    for (IngredientScanner scanner in _scanners)
+      if (scanner.check(ingredient)) {
+        bloc!.add(ingredient);
+        return;
+      }
   }
 
   //</editor-fold>

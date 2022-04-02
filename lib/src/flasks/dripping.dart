@@ -1,22 +1,28 @@
 part of alchemica.flasks;
 
-class DrippedIngredient<Dripper extends Pipe, Dripped extends Potion>
-    extends PipeIngredient {
-  final Dripper dripper;
-  final Dripped potion;
+class DrippedIngredient extends PipeIngredient {
+  final Pipe _dripper;
+  final Potion _potion;
 
   const DrippedIngredient({
-    required this.dripper,
-    required this.potion,
-  });
+    required Pipe dripper,
+    required Potion potion,
+  })  : _dripper = dripper,
+        _potion = potion;
+
+  P extract<P extends Potion>() {
+    if (_potion is! P) throw ArgumentError('Incompatible potion!');
+
+    return _potion as P;
+  }
 
   @override
   DrippedIngredient copyWith({
-    Dripper? dripper,
-    Dripped? potion,
+    Pipe? dripper,
+    Potion? potion,
   }) =>
       DrippedIngredient(
-        dripper: dripper ?? this.dripper,
-        potion: potion ?? this.potion,
+        dripper: dripper ?? _dripper,
+        potion: potion ?? _potion,
       );
 }

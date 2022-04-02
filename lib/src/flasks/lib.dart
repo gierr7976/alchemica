@@ -13,3 +13,4 @@ import 'package:meta/meta.dart';
 part 'dripping.dart';
 part 'bloc.dart';
 part 'flask.dart';
+part 'usage.dart';
