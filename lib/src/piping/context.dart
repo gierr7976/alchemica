@@ -63,10 +63,11 @@ class PipeContext {
 
   //<editor-fold desc="Checks">
 
-  void require<P extends Pipe>([Label? label]) {
+  P require<P extends Pipe>([Label? label]) {
     final P? required = lookup(label);
 
     if (required == null) throw StateError("Unsatisfied requirement!");
+    return required;
   }
 
 //</editor-fold>
