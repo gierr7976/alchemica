@@ -1,9 +1,9 @@
-library alchemica.piping;
+library alchemica.bypass;
 
-import 'package:alchemica/src/bypass/lib.dart';
 import 'package:alchemica/src/labeling/lib.dart';
+import 'package:alchemica/src/piping/lib.dart';
 import 'package:alchemica/src/preparations/lib.dart';
 import 'package:meta/meta.dart';
 
-part 'pipe.dart';
-part 'context.dart';
+part 'bypass.dart';
+part 'dispatcher.dart';
