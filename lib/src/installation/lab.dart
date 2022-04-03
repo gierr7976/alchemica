@@ -11,6 +11,7 @@ class Lab extends StatefulWidget {
 
   final Widget? child;
   final KeyWidgetBuilder? builder;
+  final BypassDispatcher? bypassDispatcher;
   final Recipe recipe;
 
   const Lab({
@@ -18,6 +19,7 @@ class Lab extends StatefulWidget {
     required this.recipe,
     this.child,
     this.builder,
+    this.bypassDispatcher,
   })  : assert(
           (child is Widget) ^ (builder is KeyWidgetBuilder),
           'Either child or builder must be provided!',
@@ -51,6 +53,14 @@ class LabState extends State<Lab> {
     buildRecipe();
   }
 
+  BypassDispatcher? _bypassDispatcher;
+
+  BypassDispatcher get bypassDispatcher {
+    shallBeInitialized();
+
+    return _bypassDispatcher!;
+  }
+
   Pipe? _rootElement;
 
   Pipe get rootElement {
@@ -61,6 +71,7 @@ class LabState extends State<Lab> {
   @override
   void initState() {
     super.initState();
+    _bypassDispatcher = widget.bypassDispatcher ?? BypassDispatcher();
     recipe = widget.recipe;
   }
 
@@ -77,7 +88,8 @@ class LabState extends State<Lab> {
   }
 
   void shallBeInitialized() {
-    if (_recipe == null) throw StateError('Shall be initialized first!');
+    if (_recipe == null || _bypassDispatcher == null)
+      throw StateError('Shall be initialized first!');
   }
 
   P require<P extends Pipe>([Label? label]) {
@@ -104,6 +116,7 @@ class LabState extends State<Lab> {
     _rootElement!.install(
       PipeContext(
         current: _rootElement!,
+        bypassDispatcher: bypassDispatcher,
         preserved: preserved,
       ),
     );
