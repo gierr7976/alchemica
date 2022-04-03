@@ -11,13 +11,15 @@ class FlaskBloc extends Bloc<Ingredient, Potion> {
   @protected
   final MutationCallback onMutation;
 
-  Fuse get fuse => GetIt.instance();
+  @protected
+  final Fuse fuse;
 
   StreamSubscription? _selfSubscription;
 
   FlaskBloc({
     required Potion initial,
     required this.onMutation,
+    required this.fuse,
   }) : super(initial);
 
   void use<I extends Ingredient>(
