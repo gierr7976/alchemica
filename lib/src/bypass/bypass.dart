@@ -22,8 +22,16 @@ abstract class Bypass extends Pipe {
   @override
   @mustCallSuper
   void install(PipeContext context) {
+    loopCheck(context);
+
     child?.install(context.inherit(child!));
     _dispatcher = context.bypassDispatcher;
+  }
+
+  @protected
+  void loopCheck(PipeContext context) {
+    Bypass? bypass = context.lookup(label);
+    if (bypass is Bypass) throw StateError('Looped bypass: $label');
   }
 
   @override

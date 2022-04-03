@@ -14,6 +14,9 @@ class Label<T> {
 
   @override
   int get hashCode => value.hashCode;
+
+  @override
+  String toString() => value.toString();
 }
 
 mixin Labelable {
