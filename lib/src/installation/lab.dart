@@ -40,14 +40,23 @@ class Lab extends StatefulWidget {
 class LabState extends State<Lab> {
   Recipe? _recipe;
 
-  Recipe get recipe => _recipe!;
+  Recipe get recipe {
+    shallBeInitialized();
+
+    return _recipe!;
+  }
 
   set recipe(Recipe recipe) {
     _recipe = recipe;
-    rebuildRecipe();
+    buildRecipe();
   }
 
   Pipe? _rootElement;
+
+  Pipe get rootElement {
+    shallBeBuilt();
+    return _rootElement!;
+  }
 
   @override
   void initState() {
@@ -63,8 +72,12 @@ class LabState extends State<Lab> {
     );
   }
 
-  void requireRoot() {
+  void shallBeBuilt() {
     if (_rootElement == null) throw StateError('Recipe shall be built first!');
+  }
+
+  void shallBeInitialized() {
+    if (_recipe == null) throw StateError('Shall be initialized first!');
   }
 
   P require<P extends Pipe>([Label? label]) {
@@ -75,21 +88,17 @@ class LabState extends State<Lab> {
   }
 
   P? prefer<P extends Pipe>([Label? label]) {
-    requireRoot();
-
-    final P? suggested = _rootElement?.find(label);
+    final P? suggested = rootElement.find(label);
     if (suggested is P) return suggested;
 
     return null;
   }
 
   void add(Ingredient ingredient) {
-    requireRoot();
-
-    _rootElement!.pass(ingredient);
+    rootElement.pass(ingredient);
   }
 
-  void rebuildRecipe() {
+  void buildRecipe() {
     final Map<Label, Potion>? preserved = _rootElement?.collect();
     _rootElement = recipe.build();
     _rootElement!.install(
