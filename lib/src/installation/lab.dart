@@ -12,6 +12,7 @@ class Lab extends StatefulWidget {
   final Widget? child;
   final KeyWidgetBuilder? builder;
   final BypassDispatcher? bypassDispatcher;
+  final FuseDispatcher fuseDispatcher;
   final Recipe recipe;
 
   const Lab({
@@ -20,6 +21,7 @@ class Lab extends StatefulWidget {
     this.child,
     this.builder,
     this.bypassDispatcher,
+    this.fuseDispatcher = const FuseDispatcher(),
   })  : assert(
           (child is Widget) ^ (builder is KeyWidgetBuilder),
           'Either child or builder must be provided!',
@@ -114,6 +116,7 @@ class LabState extends State<Lab> {
       PipeContext(
         current: _rootElement!,
         bypassDispatcher: _bypassDispatcher!,
+        fuseDispatcher: widget.fuseDispatcher,
         preserved: preserved,
       ),
     );

@@ -33,7 +33,11 @@ abstract class Flask extends Pipe {
   void install(PipeContext context) {
     dependencies(context);
 
-    _bloc = FlaskBloc(initial: brewInitial(context), onMutation: onMutation);
+    _bloc = FlaskBloc(
+      initial: brewInitial(context),
+      onMutation: onMutation,
+      fuse: context.fuseDispatcher.fuse,
+    );
     _scanners = [];
 
     usages();

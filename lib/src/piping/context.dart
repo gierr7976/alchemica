@@ -5,10 +5,12 @@ class PipeContext {
   final PipeContext? _inherited;
   final Map<Label, Potion>? _preserved;
   final BypassDispatcher bypassDispatcher;
+  final FuseDispatcher fuseDispatcher;
 
   const PipeContext({
     required Pipe current,
     required this.bypassDispatcher,
+    required this.fuseDispatcher,
     PipeContext? inherited,
     Map<Label, Potion>? preserved,
   })  : _current = current,
@@ -18,6 +20,7 @@ class PipeContext {
   PipeContext inherit(Pipe inheritor) => PipeContext(
         current: inheritor,
         bypassDispatcher: bypassDispatcher,
+        fuseDispatcher: fuseDispatcher,
         inherited: this,
         preserved: _preserved,
       );
