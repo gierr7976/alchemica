@@ -80,4 +80,10 @@ class BypassOut extends Bypass {
     dispatcher.removeConsumer(this);
     super.uninstall();
   }
+
+  @override
+  bool operator ==(Object other) => identical(this, other);
+
+  @override
+  int get hashCode => identityHashCode(this);
 }
