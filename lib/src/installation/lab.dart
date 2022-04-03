@@ -129,4 +129,10 @@ class LabState extends State<Lab> {
           context,
           widget.key as GlobalKey<LabState>,
         );
+
+  @override
+  void dispose() {
+    _rootElement?.uninstall();
+    super.dispose();
+  }
 }
