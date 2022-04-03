@@ -17,7 +17,7 @@ abstract class Flask extends Pipe {
     return _bloc!;
   }
 
-  List<IngredientScanner>? _scanners;
+  List<MagicPerformer>? _performers;
 
   FlaskBloc? _bloc;
 
@@ -38,7 +38,7 @@ abstract class Flask extends Pipe {
       onMutation: onMutation,
       fuse: context.fuseDispatcher.fuse,
     );
-    _scanners = [];
+    _performers = [];
 
     usages();
   }
@@ -49,7 +49,10 @@ abstract class Flask extends Pipe {
   }
 
   @protected
-  void usages();
+  @mustCallSuper
+  void usages() {
+    use<DrippedIngredient>(onDripped);
+  }
 
   @protected
   Potion brewInitial(PipeContext context) =>
@@ -64,18 +67,35 @@ abstract class Flask extends Pipe {
   }) {
     shallBeInstalled();
 
-    _scanners!.add(IngredientScanner<I>());
-    _bloc!.use(magic, transformer);
+    final bool performerAdded = addPerformer(MagicPerformer<I>(magic));
+    if (performerAdded) _bloc!.use(magic, transformer);
   }
 
+  @protected
   void useDripped<D extends Pipe, P extends Potion>(
     Magic<DrippedIngredient> magic, {
     EventTransformer<DrippedIngredient>? transformer,
   }) {
     shallBeInstalled();
 
-    _scanners!.add(DrippedIngredientScanner<D, P>());
-    _bloc!.use(magic, transformer);
+    addPerformer(DrippedMagicPerformer<D, P>(magic));
+  }
+
+  @protected
+  bool addPerformer(MagicPerformer performer) {
+    shallBeInstalled();
+
+    if (_performers!.any((registered) => performer == registered)) return false;
+
+    _performers!.add(performer);
+    return true;
+  }
+
+  @protected
+  FutureOr<void> onDripped(DrippedIngredient ingredient, Emitter<Potion> emit) {
+    for (MagicPerformer performer in _performers!)
+      if (performer.check(ingredient))
+        return performer.perform(ingredient, emit);
   }
 
   //</editor-fold>
@@ -93,7 +113,7 @@ abstract class Flask extends Pipe {
   void pass(Ingredient ingredient) {
     shallBeInstalled();
 
-    for (IngredientScanner scanner in _scanners!)
+    for (MagicPerformer scanner in _performers!)
       if (scanner.check(ingredient)) {
         _bloc!.add(ingredient);
         return;
@@ -115,7 +135,7 @@ abstract class Flask extends Pipe {
 
   @protected
   void shallBeInstalled() {
-    if (_bloc is! FlaskBloc || _scanners is! List<IngredientScanner>)
+    if (_bloc is! FlaskBloc || _performers is! List<MagicPerformer>)
       throw StateError('Shall be installed first!');
   }
 
