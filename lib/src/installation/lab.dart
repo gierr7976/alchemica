@@ -109,6 +109,7 @@ class LabState extends State<Lab> {
     shallBeInitialized();
 
     final Map<Label, Potion>? preserved = _rootElement?.collect();
+    _rootElement?.uninstall();
     _rootElement = recipe.build();
     _rootElement!.install(
       PipeContext(
