@@ -55,18 +55,7 @@ class LabState extends State<Lab> {
 
   BypassDispatcher? _bypassDispatcher;
 
-  BypassDispatcher get bypassDispatcher {
-    shallBeInitialized();
-
-    return _bypassDispatcher!;
-  }
-
   Pipe? _rootElement;
-
-  Pipe get rootElement {
-    shallBeBuilt();
-    return _rootElement!;
-  }
 
   @override
   void initState() {
@@ -84,6 +73,8 @@ class LabState extends State<Lab> {
   }
 
   void shallBeBuilt() {
+    shallBeInitialized();
+
     if (_rootElement == null) throw StateError('Recipe shall be built first!');
   }
 
@@ -100,23 +91,29 @@ class LabState extends State<Lab> {
   }
 
   P? prefer<P extends Pipe>([Label? label]) {
-    final P? suggested = rootElement.find(label);
+    shallBeBuilt();
+
+    final P? suggested = _rootElement!.find(label);
     if (suggested is P) return suggested;
 
     return null;
   }
 
   void add(Ingredient ingredient) {
-    rootElement.pass(ingredient);
+    shallBeBuilt();
+
+    _rootElement!.pass(ingredient);
   }
 
   void buildRecipe() {
+    shallBeInitialized();
+
     final Map<Label, Potion>? preserved = _rootElement?.collect();
     _rootElement = recipe.build();
     _rootElement!.install(
       PipeContext(
         current: _rootElement!,
-        bypassDispatcher: bypassDispatcher,
+        bypassDispatcher: _bypassDispatcher!,
         preserved: preserved,
       ),
     );
