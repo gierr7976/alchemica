@@ -1,37 +1,29 @@
 part of alchemica.consumers;
 
-class Pourer<F extends Flask> extends StatelessWidget {
-  final Label? label;
+class Pourer<F extends Flask> extends Crane<F> {
   final WidgetBuilder? onMissing;
   final Rule rule;
 
-  @protected
+  @override
   bool get strict => onMissing == null;
-
-  F? getFlask(BuildContext context) {
-    final LabState lab = Lab.of(context);
-
-    if (strict) return lab.require(label);
-    return lab.prefer(label);
-  }
 
   const Pourer({
     Key? key,
-    this.label,
+    Label? label,
     required this.rule,
     this.onMissing,
-  }) : super(key: key);
+  }) : super(
+          key: key,
+          label: label,
+        );
 
   @override
-  Widget build(BuildContext context) {
-    final F? flask = getFlask(context);
-
-    if (flask is F)
-      return BlocBuilder<FlaskBloc, Potion>(
+  Widget buildWithFlask(BuildContext context, F flask) =>
+      BlocBuilder<FlaskBloc, Potion>(
         bloc: getFlask(context)!.bloc,
         builder: rule.map,
       );
 
-    return onMissing!(context);
-  }
+  @override
+  Widget buildWithoutFlask(BuildContext context) => onMissing!(context);
 }

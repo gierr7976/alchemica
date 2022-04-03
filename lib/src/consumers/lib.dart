@@ -10,3 +10,4 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'pourer.dart';
 part 'rule.dart';
 part 'vial.dart';
+part 'crane.dart';
