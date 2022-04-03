@@ -18,20 +18,29 @@ class Lab extends StatefulWidget {
 }
 
 class LabState extends State<Lab> {
-  Recipe get _recipe => widget.recipe;
+  Recipe? _recipe;
+
+  Recipe get recipe => _recipe!;
+
+  set recipe(Recipe recipe) {
+    _recipe = recipe;
+    rebuildRecipe();
+  }
 
   Pipe? _rootElement;
 
   @override
   void initState() {
     super.initState();
-    rebuildRecipe();
+    recipe = widget.recipe;
   }
 
   @override
   void didUpdateWidget(covariant Lab oldWidget) {
     super.didUpdateWidget(oldWidget);
-    setState(rebuildRecipe);
+    setState(
+      () => recipe = widget.recipe,
+    );
   }
 
   void requireRoot() {
@@ -62,7 +71,7 @@ class LabState extends State<Lab> {
 
   void rebuildRecipe() {
     final Map<Label, Potion>? preserved = _rootElement?.collect();
-    _rootElement = _recipe.build();
+    _rootElement = recipe.build();
     _rootElement!.install(
       PipeContext(
         current: _rootElement!,
