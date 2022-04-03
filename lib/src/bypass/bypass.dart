@@ -6,12 +6,12 @@ abstract class Bypass extends Pipe {
   @override
   final Label label;
 
-  BypassDispatcher? _controller;
+  BypassDispatcher? _dispatcher;
 
-  BypassDispatcher get controller {
+  BypassDispatcher get dispatcher {
     shallBeInstalled();
 
-    return _controller!;
+    return _dispatcher!;
   }
 
   Bypass({
@@ -23,7 +23,7 @@ abstract class Bypass extends Pipe {
   @mustCallSuper
   void install(PipeContext context) {
     child?.install(context.inherit(child!));
-    // TODO: implement controller handling
+    _dispatcher = context.bypassDispatcher;
   }
 
   @override
@@ -39,7 +39,7 @@ abstract class Bypass extends Pipe {
   }
 
   void shallBeInstalled() {
-    if (_controller is! BypassDispatcher)
+    if (_dispatcher is! BypassDispatcher)
       throw StateError('Shall be installed first!');
   }
 }
@@ -55,7 +55,7 @@ class BypassIn extends Bypass {
 
   @override
   void pass(Ingredient ingredient) {
-    controller.pass(this, ingredient);
+    dispatcher.pass(this, ingredient);
     super.pass(ingredient);
   }
 }
@@ -72,12 +72,12 @@ class BypassOut extends Bypass {
   @override
   void install(PipeContext context) {
     super.install(context);
-    controller.addConsumer(this);
+    dispatcher.addConsumer(this);
   }
 
   @override
   void uninstall() {
-    controller.removeConsumer(this);
+    dispatcher.removeConsumer(this);
     super.uninstall();
   }
 }
