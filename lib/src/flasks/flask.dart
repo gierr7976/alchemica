@@ -9,18 +9,12 @@ abstract class Flask extends Pipe {
   //<editor-fold desc="State guarded">
 
   @override
-  Potion? get potion => bloc.state;
+  Potion get potion => bloc.state;
 
   FlaskBloc get bloc {
     shallBeInstalled();
 
     return _bloc!;
-  }
-
-  List<IngredientScanner> get scanners {
-    shallBeInstalled();
-
-    return _scanners!;
   }
 
   List<IngredientScanner>? _scanners;
@@ -64,16 +58,20 @@ abstract class Flask extends Pipe {
     Magic<I> magic, {
     EventTransformer<I>? transformer,
   }) {
-    scanners.add(IngredientScanner<I>());
-    bloc.use(magic, transformer);
+    shallBeInstalled();
+
+    _scanners!.add(IngredientScanner<I>());
+    _bloc!.use(magic, transformer);
   }
 
   void useDripped<D extends Pipe, P extends Potion>(
     Magic<DrippedIngredient> magic, {
     EventTransformer<DrippedIngredient>? transformer,
   }) {
-    scanners.add(DrippedIngredientScanner<D, P>());
-    bloc.use(magic, transformer);
+    shallBeInstalled();
+
+    _scanners!.add(DrippedIngredientScanner<D, P>());
+    _bloc!.use(magic, transformer);
   }
 
   //</editor-fold>
@@ -89,9 +87,11 @@ abstract class Flask extends Pipe {
 
   @override
   void pass(Ingredient ingredient) {
-    for (IngredientScanner scanner in scanners)
+    shallBeInstalled();
+
+    for (IngredientScanner scanner in _scanners!)
       if (scanner.check(ingredient)) {
-        bloc.add(ingredient);
+        _bloc!.add(ingredient);
         return;
       }
   }
@@ -111,7 +111,8 @@ abstract class Flask extends Pipe {
 
   @protected
   void shallBeInstalled() {
-    if (_bloc is! FlaskBloc) throw StateError('Shall be installed first!');
+    if (_bloc is! FlaskBloc || _scanners is! List<IngredientScanner>)
+      throw StateError('Shall be installed first!');
   }
 
   @protected
