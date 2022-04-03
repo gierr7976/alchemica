@@ -3,6 +3,8 @@ part of alchemica.bypass;
 class BypassDispatcher {
   final List<BypassOut> _consumers = [];
 
+  BypassDispatcher();
+
   void addConsumer(BypassOut consumer) => _consumers.add(consumer);
 
   void removeConsumer(BypassOut consumer) => _consumers.remove(consumer);
