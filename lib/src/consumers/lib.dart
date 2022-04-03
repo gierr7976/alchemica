@@ -11,3 +11,4 @@ part 'pourer.dart';
 part 'rule.dart';
 part 'vial.dart';
 part 'crane.dart';
+part 'indicator.dart';
