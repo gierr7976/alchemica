@@ -76,7 +76,7 @@ class BypassIn extends Bypass {
   }
 
   void checkContext(PipeContext context) {
-    final BypassIn? other = context.lookup();
+    final BypassIn? other = context.lookup(null, true);
     if (other is BypassIn)
       throw StateError('Multiple BypassIn in same context!');
   }
