@@ -57,6 +57,7 @@ void main() => group(
       'Logic tree feature tests',
       () {
         presence();
+        installation();
       },
     );
 
@@ -73,5 +74,26 @@ void presence() => test(
         expect(dump.flaskB is TestFlask, true);
         expect(identical(dump.flaskA, dump.flaskB), false);
         expect(dump.fork is Fork, true);
+      },
+    );
+
+void installation() => test(
+      'Installation test',
+      () {
+        final Pipe root = TestRecipe().build();
+        root.install(
+          PipeContext(
+            current: root,
+            bypassDispatcher: BypassDispatcher(),
+            fuseDispatcher: FuseDispatcher(),
+          ),
+        );
+
+        final TestRecipeDump dump = TestRecipeDump.from(root);
+
+        expect(dump.flaskA!.isInstalled, true);
+        expect(dump.flaskB!.isInstalled, true);
+        expect(dump.bypassIn!.isInstalled, true);
+        expect(dump.bypassOut!.isInstalled, true);
       },
     );
