@@ -69,8 +69,11 @@ class BypassIn extends Bypass {
 }
 
 class BypassOut extends Bypass {
+  final List<MagicPerformer> allowed;
+
   BypassOut({
     required Label label,
+    required this.allowed,
     Pipe? child,
   }) : super(
           label: label,
@@ -81,6 +84,11 @@ class BypassOut extends Bypass {
   void install(PipeContext context) {
     super.install(context);
     dispatcher.addConsumer(this);
+  }
+
+  void _bypass(Ingredient ingredient) {
+    if (allowed.any((performer) => performer.check(ingredient)))
+      pass(ingredient);
   }
 
   @override

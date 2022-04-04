@@ -1,4 +1,9 @@
-part of alchemica.flasks;
+part of alchemica.preparations;
+
+typedef Magic<I extends Ingredient> = FutureOr<void> Function(
+  I ingredient,
+  Emitter<Potion> emit,
+);
 
 class MagicPerformer<I extends Ingredient> {
   final Magic<I> magic;

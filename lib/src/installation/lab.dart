@@ -59,9 +59,12 @@ class LabState extends State<Lab> {
 
   Pipe? _rootElement;
 
+  BypassDispatcher? _bypassDispatcher;
+
   @override
   void initState() {
     super.initState();
+    _bypassDispatcher = widget.bypassDispatcher;
     recipe = widget.recipe;
   }
 
@@ -80,7 +83,8 @@ class LabState extends State<Lab> {
   }
 
   void shallBeInitialized() {
-    if (_recipe == null) throw StateError('Shall be initialized first!');
+    if (_recipe == null || _bypassDispatcher == null)
+      throw StateError('Shall be initialized first!');
   }
 
   P require<P extends Pipe>([Label? label]) {
@@ -111,11 +115,10 @@ class LabState extends State<Lab> {
     final Map<Label, Potion>? preserved = _rootElement?.collect();
     _rootElement?.uninstall();
     _rootElement = recipe.build();
-    widget.bypassDispatcher.clearAllowed();
     _rootElement!.install(
       PipeContext(
         current: _rootElement!,
-        bypassDispatcher: widget.bypassDispatcher,
+        bypassDispatcher: _bypassDispatcher!,
         fuseDispatcher: widget.fuseDispatcher,
         preserved: preserved,
       ),
