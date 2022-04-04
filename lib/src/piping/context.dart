@@ -27,8 +27,8 @@ class PipeContext {
 
   //<editor-fold desc="Search methods">
 
-  P? lookup<P extends Pipe>([Label? label]) {
-    final P? maybeCurrent = _current._conditional(label);
+  P? lookup<P extends Pipe>([Label? label, bool skipCurrent = false]) {
+    final P? maybeCurrent = skipCurrent ? null : _current._conditional(label);
 
     return maybeCurrent ?? _inherited?.lookup(label);
   }
