@@ -17,9 +17,12 @@ abstract class Flask extends Pipe {
     return _bloc!;
   }
 
+  FlaskBloc? _bloc;
+
   List<MagicPerformer>? _performers;
 
-  FlaskBloc? _bloc;
+  bool get isInstalled =>
+      _bloc is FlaskBloc && _performers is List<MagicPerformer>;
 
   //</editor-fold>
 
@@ -135,8 +138,7 @@ abstract class Flask extends Pipe {
 
   @protected
   void shallBeInstalled() {
-    if (_bloc is! FlaskBloc || _performers is! List<MagicPerformer>)
-      throw StateError('Shall be installed first!');
+    if (!isInstalled) throw StateError('Shall be installed first!');
   }
 
   @protected
