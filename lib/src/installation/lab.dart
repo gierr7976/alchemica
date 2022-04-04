@@ -57,9 +57,14 @@ class LabState extends State<Lab> {
     buildRecipe();
   }
 
+  BypassDispatcher? _bypassDispatcher;
+
+  bool get isInitialized =>
+      _recipe is Recipe && _bypassDispatcher is BypassDispatcher;
+
   Pipe? _rootElement;
 
-  BypassDispatcher? _bypassDispatcher;
+  bool get isTreeBuilt => _rootElement is Pipe;
 
   @override
   void initState() {
@@ -79,12 +84,11 @@ class LabState extends State<Lab> {
   void shallBeBuilt() {
     shallBeInitialized();
 
-    if (_rootElement == null) throw StateError('Recipe shall be built first!');
+    if (!isTreeBuilt) throw StateError('Recipe shall be built first!');
   }
 
   void shallBeInitialized() {
-    if (_recipe == null || _bypassDispatcher == null)
-      throw StateError('Shall be initialized first!');
+    if (!isInitialized) throw StateError('Shall be initialized first!');
   }
 
   P require<P extends Pipe>([Label? label]) {
