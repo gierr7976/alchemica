@@ -9,3 +9,4 @@ import 'package:meta/meta.dart';
 
 part 'bypass.dart';
 part 'dispatcher.dart';
+part 'magic.dart';
