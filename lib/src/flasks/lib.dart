@@ -9,7 +9,5 @@ import 'package:alchemica/src/preparations/lib.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
-part 'dripping.dart';
 part 'bloc.dart';
 part 'flask.dart';
-part 'usage.dart';

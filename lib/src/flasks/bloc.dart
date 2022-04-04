@@ -1,10 +1,5 @@
 part of alchemica.flasks;
 
-typedef Magic<I extends Ingredient> = FutureOr<void> Function(
-  I ingredient,
-  Emitter<Potion> emit,
-);
-
 typedef MutationCallback = void Function(Potion potion);
 
 class FlaskBloc extends Bloc<Ingredient, Potion> {
