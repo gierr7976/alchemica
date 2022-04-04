@@ -41,6 +41,19 @@ abstract class Bypass extends Pipe {
     child?.uninstall();
   }
 
+  @override
+  P? find<P extends Pipe>([Label? label]) {
+    final P? maybeThis = super.find(label);
+
+    return maybeThis ?? child?.find(label);
+  }
+
+  @override
+  Map<Label, Potion> collect() => {
+        ...super.collect(),
+        ...(child?.collect() ?? {}),
+      };
+
   void shallBeInstalled() {
     if (!isInstalled) throw StateError('Shall be installed first!');
   }
