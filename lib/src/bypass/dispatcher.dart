@@ -15,7 +15,7 @@ class BypassDispatcher {
 
   @mustCallSuper
   void pass(BypassIn source, Ingredient ingredient) {
-    if (_latestIngredient == ingredient) return _latestIngredient = null;
+    if (identical(_latestIngredient, ingredient)) return;
     _latestIngredient = ingredient;
 
     _bypass(source, ingredient);
