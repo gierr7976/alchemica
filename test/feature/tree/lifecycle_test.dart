@@ -29,6 +29,30 @@ class TestRecipe extends Recipe {
       );
 }
 
+class TestRecipeDump {
+  final BypassIn? bypassIn;
+  final BypassOut? bypassOut;
+  final TestFlask? flaskA;
+  final TestFlask? flaskB;
+  final Fork? fork;
+
+  const TestRecipeDump({
+    this.bypassIn,
+    this.bypassOut,
+    this.flaskA,
+    this.flaskB,
+    this.fork,
+  });
+
+  factory TestRecipeDump.from(Pipe pipe) => TestRecipeDump(
+        bypassIn: pipe.find(),
+        bypassOut: pipe.find(),
+        flaskA: pipe.find(Label(1)),
+        flaskB: pipe.find(Label(2)),
+        fork: pipe.find(),
+      );
+}
+
 void main() => group(
       'Logic tree feature tests',
       () {
@@ -41,17 +65,13 @@ void presence() => test(
       () {
         final Pipe root = TestRecipe().build();
 
-        final BypassIn? bypassIn = root.find();
-        final BypassOut? bypassOut = root.find();
-        final TestFlask? flaskA = root.find(Label(1));
-        final TestFlask? flaskB = root.find(Label(2));
-        final Fork? fork = root.find();
+        final TestRecipeDump dump = TestRecipeDump.from(root);
 
-        expect(bypassIn is BypassIn, true);
-        expect(bypassOut is BypassOut, true);
-        expect(flaskA is TestFlask, true);
-        expect(flaskB is TestFlask, true);
-        expect(identical(flaskA, flaskB), false);
-        expect(fork is Fork, true);
+        expect(dump.bypassIn is BypassIn, true);
+        expect(dump.bypassOut is BypassOut, true);
+        expect(dump.flaskA is TestFlask, true);
+        expect(dump.flaskB is TestFlask, true);
+        expect(identical(dump.flaskA, dump.flaskB), false);
+        expect(dump.fork is Fork, true);
       },
     );
