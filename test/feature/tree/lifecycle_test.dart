@@ -150,7 +150,9 @@ void main() => group(
       () {
         presence();
         installation();
+        uninstallation();
         processing();
+        collection();
       },
     );
 
@@ -191,6 +193,28 @@ void installation() => test(
       },
     );
 
+void uninstallation() => test(
+      'Uninstallation test',
+      () {
+        final Pipe root = TestRecipe((_) => _).build();
+        root.install(
+          PipeContext(
+            current: root,
+            bypassDispatcher: BypassDispatcher(),
+            fuseDispatcher: FuseDispatcher(),
+          ),
+        );
+        root.uninstall();
+
+        final TestRecipeSnapshot snapshot = TestRecipeSnapshot.from(root);
+
+        expect(snapshot.flaskA!.isInstalled, false);
+        expect(snapshot.flaskB!.isInstalled, false);
+        expect(snapshot.bypassIn!.isInstalled, false);
+        expect(snapshot.bypassOut!.isInstalled, false);
+      },
+    );
+
 void processing() => test(
       'Ingredient processing test',
       () async {
@@ -219,5 +243,29 @@ void processing() => test(
 
         expect(hasMarked, true);
         expect(drippedCount, 2);
+      },
+    );
+
+void collection() => test(
+      'Collection test',
+      () async {
+        final Pipe root = TestRecipe((_) => _).build();
+        root.install(
+          PipeContext(
+            current: root,
+            bypassDispatcher: BypassDispatcher(),
+            fuseDispatcher: FuseDispatcher(),
+          ),
+        );
+
+        root.pass(MarkedIngredient(marker: 2));
+
+        await Future.delayed(Duration(milliseconds: 10));
+
+        Map<Label, Potion> collection = root.collect();
+
+        expect(collection[Label(1)] is MarkedPotion, true);
+        expect(collection[Label(2)] is MarkedPotion, true);
+        expect(collection.length, 2);
       },
     );

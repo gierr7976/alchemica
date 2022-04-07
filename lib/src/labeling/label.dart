@@ -1,7 +1,7 @@
 part of alchemica.labeling;
 
-class Label<T> {
-  final T value;
+class Label {
+  final dynamic value;
 
   Label(this.value);
 
