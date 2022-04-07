@@ -29,14 +29,14 @@ class TestRecipe extends Recipe {
       );
 }
 
-class TestRecipeDump {
+class TestRecipeSnapshot {
   final BypassIn? bypassIn;
   final BypassOut? bypassOut;
   final TestFlask? flaskA;
   final TestFlask? flaskB;
   final Fork? fork;
 
-  const TestRecipeDump({
+  const TestRecipeSnapshot({
     this.bypassIn,
     this.bypassOut,
     this.flaskA,
@@ -44,7 +44,7 @@ class TestRecipeDump {
     this.fork,
   });
 
-  factory TestRecipeDump.from(Pipe pipe) => TestRecipeDump(
+  factory TestRecipeSnapshot.from(Pipe pipe) => TestRecipeSnapshot(
         bypassIn: pipe.find(),
         bypassOut: pipe.find(),
         flaskA: pipe.find(Label(1)),
@@ -66,14 +66,14 @@ void presence() => test(
       () {
         final Pipe root = TestRecipe().build();
 
-        final TestRecipeDump dump = TestRecipeDump.from(root);
+        final TestRecipeSnapshot snapshot = TestRecipeSnapshot.from(root);
 
-        expect(dump.bypassIn is BypassIn, true);
-        expect(dump.bypassOut is BypassOut, true);
-        expect(dump.flaskA is TestFlask, true);
-        expect(dump.flaskB is TestFlask, true);
-        expect(identical(dump.flaskA, dump.flaskB), false);
-        expect(dump.fork is Fork, true);
+        expect(snapshot.bypassIn is BypassIn, true);
+        expect(snapshot.bypassOut is BypassOut, true);
+        expect(snapshot.flaskA is TestFlask, true);
+        expect(snapshot.flaskB is TestFlask, true);
+        expect(identical(snapshot.flaskA, snapshot.flaskB), false);
+        expect(snapshot.fork is Fork, true);
       },
     );
 
@@ -89,11 +89,11 @@ void installation() => test(
           ),
         );
 
-        final TestRecipeDump dump = TestRecipeDump.from(root);
+        final TestRecipeSnapshot snapshot = TestRecipeSnapshot.from(root);
 
-        expect(dump.flaskA!.isInstalled, true);
-        expect(dump.flaskB!.isInstalled, true);
-        expect(dump.bypassIn!.isInstalled, true);
-        expect(dump.bypassOut!.isInstalled, true);
+        expect(snapshot.flaskA!.isInstalled, true);
+        expect(snapshot.flaskB!.isInstalled, true);
+        expect(snapshot.bypassIn!.isInstalled, true);
+        expect(snapshot.bypassOut!.isInstalled, true);
       },
     );
