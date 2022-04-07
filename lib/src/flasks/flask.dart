@@ -131,8 +131,10 @@ abstract class Flask extends Pipe {
   //<editor-fold desc="Uninstallation methods">
 
   @override
-  void uninstall() {
+  @mustCallSuper
+  void uninstall() async {
     bloc.close();
+    _performers = null;
   }
 
   //</editor-fold>
