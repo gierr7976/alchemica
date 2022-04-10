@@ -34,4 +34,7 @@ abstract class Pipe with Labelable {
       };
 
   //</editor-fold>
+
+  @override
+  String toString() => '$runtimeType[$label] — $potion';
 }

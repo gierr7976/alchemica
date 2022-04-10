@@ -153,6 +153,7 @@ abstract class Flask extends Pipe {
   }
 
   @protected
+  @visibleForTesting
   P? prefer<P extends Potion>() {
     return potion is P ? potion as P : null;
   }
