@@ -1,5 +1,4 @@
 import 'package:alchemica/alchemica.dart';
-import 'package:alchemica/src/labeling/lib.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class MockPipe extends Pipe {
