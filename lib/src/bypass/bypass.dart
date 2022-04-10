@@ -16,10 +16,14 @@ abstract class Bypass extends Pipe {
     return _dispatcher!;
   }
 
+  Ingredient? _latest;
+
   Bypass({
     required this.label,
     this.child,
   });
+
+  bool isNotLatest(Ingredient ingredient) => !identical(ingredient, _latest);
 
   @override
   @mustCallSuper
@@ -31,7 +35,10 @@ abstract class Bypass extends Pipe {
   @override
   @mustCallSuper
   void pass(Ingredient ingredient) {
-    child?.pass(ingredient);
+    if (isNotLatest(ingredient)) {
+      _latest = ingredient;
+      child?.pass(ingredient);
+    }
   }
 
   @override
@@ -107,8 +114,11 @@ class BypassOut extends Bypass {
   }
 
   void _bypass(Ingredient ingredient) {
-    if (allowed.any((performer) => performer.check(ingredient)))
-      pass(ingredient);
+    final bool isAllowed = allowed.any(
+      (performer) => performer.check(ingredient),
+    );
+
+    if (isAllowed) pass(ingredient);
   }
 
   @override
