@@ -21,5 +21,13 @@ jobs:
       - name: Running lints
         run: flutter analyze
 
-      - name: Running tests
-        run: flutter test
+      - name: Running tests with coverage
+        run: flutter test --coverage
+
+      - name: Reporting code coverage
+        uses: zgosalvez/github-actions-report-lcov@v1
+        with:
+          coverage-files: coverage/lcov.info
+          minimum-coverage: 60
+          artifact-name: code-coverage-report
+          github-token: ${{ secrets.GITHUB_TOKEN }}
