@@ -44,87 +44,34 @@ class Lab extends StatefulWidget {
 }
 
 class LabState extends State<Lab> {
-  Recipe? _recipe;
+  late final Alchemist _alchemist;
 
-  Recipe get recipe {
-    shallBeInitialized();
+  P require<P extends Pipe>([Label? label]) => _alchemist.require(label);
 
-    return _recipe!;
-  }
+  P? prefer<P extends Pipe>([Label? label]) => _alchemist.prefer(label);
 
-  set recipe(Recipe recipe) {
-    _recipe = recipe;
-    buildRecipe();
-  }
-
-  BypassDispatcher? _bypassDispatcher;
-
-  bool get isInitialized =>
-      _recipe is Recipe && _bypassDispatcher is BypassDispatcher;
-
-  Pipe? _rootElement;
-
-  bool get isTreeBuilt => _rootElement is Pipe;
+  void add(AlchemistIngredient ingredient) => _alchemist.add(ingredient);
 
   @override
   void initState() {
     super.initState();
-    _bypassDispatcher = widget.bypassDispatcher;
-    recipe = widget.recipe;
+
+    _alchemist = Alchemist(
+      bypassDispatcher: widget.bypassDispatcher,
+      fuseDispatcher: widget.fuseDispatcher,
+    );
+    _alchemist.buildFor(recipe: widget.recipe);
   }
 
   @override
   void didUpdateWidget(covariant Lab oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     setState(
-      () => recipe = widget.recipe,
-    );
-  }
-
-  void shallBeBuilt() {
-    shallBeInitialized();
-
-    if (!isTreeBuilt) throw StateError('Recipe shall be built first!');
-  }
-
-  void shallBeInitialized() {
-    if (!isInitialized) throw StateError('Shall be initialized first!');
-  }
-
-  P require<P extends Pipe>([Label? label]) {
-    final P? suggested = prefer(label);
-    if (suggested is P) return suggested;
-
-    throw StateError('Required element is not presented!');
-  }
-
-  P? prefer<P extends Pipe>([Label? label]) {
-    shallBeBuilt();
-
-    final P? suggested = _rootElement!.find(label);
-    if (suggested is P) return suggested;
-
-    return null;
-  }
-
-  void add(Ingredient ingredient) {
-    shallBeBuilt();
-
-    _rootElement!.pass(ingredient);
-  }
-
-  void buildRecipe() {
-    shallBeInitialized();
-
-    final Map<Label, Potion>? preserved = _rootElement?.collect();
-    _rootElement?.uninstall();
-    _rootElement = recipe.build();
-    _rootElement!.install(
-      PipeContext(
-        current: _rootElement!,
-        bypassDispatcher: _bypassDispatcher!,
+      () => _alchemist.buildFor(
+        recipe: widget.recipe,
+        bypassDispatcher: widget.bypassDispatcher,
         fuseDispatcher: widget.fuseDispatcher,
-        preserved: preserved,
       ),
     );
   }
@@ -139,7 +86,7 @@ class LabState extends State<Lab> {
 
   @override
   void dispose() {
-    _rootElement?.uninstall();
+    _alchemist.uninstall();
     super.dispose();
   }
 }

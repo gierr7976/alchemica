@@ -8,6 +8,6 @@ abstract class Vial<P extends Potion?> extends StatelessWidget {
     required this.potion,
   }) : super(key: key);
 
-  void add(BuildContext context, Ingredient ingredient) =>
+  void add(BuildContext context, AlchemistIngredient ingredient) =>
       Lab.of(context).add(ingredient);
 }

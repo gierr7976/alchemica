@@ -77,4 +77,8 @@ class Alchemist {
   }
 
 //</editor-fold>
+
+  void uninstall() {
+    _root?.uninstall();
+  }
 }
