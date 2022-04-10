@@ -132,6 +132,7 @@ void main() => group(
         uninstallation();
         processing();
         collection();
+        preservation();
       },
     );
 
@@ -211,7 +212,7 @@ void processing() => test(
 
         root.pass(MarkedIngredient(marker: 2));
 
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future(() => null);
 
         final List<Ingredient> fromTrap =
             root.find<TestTrap>()?.prefer<BrewedTrap>()?.caught ?? [];
@@ -241,9 +242,44 @@ void collection() => test(
 
         root.pass(MarkedIngredient(marker: 2));
 
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future(() => null);
 
         Map<Label, Potion> collection = root.collect();
+
+        expect(collection[Label(1)] is MarkedPotion, true);
+        expect(collection[Label(2)] is MarkedPotion, true);
+        expect(collection[Label(TestTrap)] is BrewedTrap, true);
+        expect(collection.length, 3);
+      },
+    );
+
+void preservation() => test(
+      'Preservation test',
+      () async {
+        final Pipe oldRoot = TestRecipe().build();
+        oldRoot.install(
+          PipeContext(
+            current: oldRoot,
+            bypassDispatcher: BypassDispatcher(),
+            fuseDispatcher: FuseDispatcher(),
+          ),
+        );
+
+        oldRoot.pass(MarkedIngredient(marker: 2));
+
+        await Future(() => null);
+
+        final Pipe root = TestRecipe().build();
+        root.install(
+          PipeContext(
+            current: root,
+            bypassDispatcher: BypassDispatcher(),
+            fuseDispatcher: FuseDispatcher(),
+            preserved: oldRoot.collect(),
+          ),
+        );
+
+        final Map<Label, Potion> collection = root.collect();
 
         expect(collection[Label(1)] is MarkedPotion, true);
         expect(collection[Label(2)] is MarkedPotion, true);
