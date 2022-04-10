@@ -125,7 +125,7 @@ class TestRecipeSnapshot {
 }
 
 void main() => group(
-      'Logic tree feature tests',
+      'Logic tree lifecycle tests',
       () {
         presence();
         installation();
