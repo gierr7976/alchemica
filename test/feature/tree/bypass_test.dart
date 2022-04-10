@@ -7,6 +7,7 @@ class MarkedIngredient extends AlchemistIngredient {
 
   MarkedIngredient(this.mark);
 
+  @override
   MarkedIngredient copyWith({
     int? mark,
   }) =>
