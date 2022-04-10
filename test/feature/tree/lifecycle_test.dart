@@ -1,4 +1,5 @@
 import 'package:alchemica/alchemica.dart';
+import 'package:alchemica/debug.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:meta/meta.dart';
 
@@ -16,6 +17,9 @@ class MarkedIngredient extends AlchemistIngredient {
       MarkedIngredient(
         marker: marker ?? this.marker,
       );
+
+  @override
+  String toString() => 'MarkedIngredient($marker)';
 }
 
 class TestFlask extends ConnectedFlask {
@@ -55,46 +59,22 @@ class MarkedPotion extends BrewedPotion {
       MarkedPotion(
         marker: marker ?? this.marker,
       );
+
+  @override
+  String toString() => 'MarkedPotion($marker)';
 }
 
-class Trap extends Pipe {
-  final Label? _label;
-
+class TestTrap extends Trap {
   @override
-  Label get label => _label ?? super.label;
-
-  final Pipe? child;
-  final void Function(Ingredient ingredient) onCaught;
-
-  Trap({
-    Label? label,
-    this.child,
-    required this.onCaught,
-  }) : _label = label;
-
-  @override
-  void install(PipeContext context) {
-    child?.install(
-      context.inherit(child!),
-    );
-  }
-
-  @override
-  void pass(Ingredient ingredient) {
-    onCaught(ingredient);
-    child?.pass(ingredient);
-  }
-
-  @override
-  void uninstall() {
-    child?.uninstall();
+  void usages() {
+    use<AlchemistIngredient>(onIngredient);
+    use<PipeIngredient>(onIngredient);
+    useDripped<Pipe, Potion>(onIngredient);
   }
 }
 
 class TestRecipe extends Recipe {
-  final void Function(Ingredient ingredient) onCaught;
-
-  TestRecipe(this.onCaught);
+  TestRecipe();
 
   @override
   Pipe build() => BypassOut(
@@ -109,9 +89,7 @@ class TestRecipe extends Recipe {
               ),
               TestFlask(
                 label: Label(2),
-                child: Trap(
-                  onCaught: onCaught,
-                ),
+                child: TestTrap(),
               )
             ],
           ),
@@ -125,6 +103,7 @@ class TestRecipeSnapshot {
   final TestFlask? flaskA;
   final TestFlask? flaskB;
   final Fork? fork;
+  final TestTrap? trap;
 
   const TestRecipeSnapshot({
     this.bypassIn,
@@ -132,6 +111,7 @@ class TestRecipeSnapshot {
     this.flaskA,
     this.flaskB,
     this.fork,
+    this.trap,
   });
 
   factory TestRecipeSnapshot.from(Pipe pipe) => TestRecipeSnapshot(
@@ -140,6 +120,7 @@ class TestRecipeSnapshot {
         flaskA: pipe.find(Label(1)),
         flaskB: pipe.find(Label(2)),
         fork: pipe.find(),
+        trap: pipe.find(),
       );
 }
 
@@ -157,7 +138,7 @@ void main() => group(
 void presence() => test(
       'Presence test',
       () {
-        final Pipe root = TestRecipe((_) => _).build();
+        final Pipe root = TestRecipe().build();
 
         final TestRecipeSnapshot snapshot = TestRecipeSnapshot.from(root);
 
@@ -167,13 +148,14 @@ void presence() => test(
         expect(snapshot.flaskB is TestFlask, true);
         expect(identical(snapshot.flaskA, snapshot.flaskB), false);
         expect(snapshot.fork is Fork, true);
+        expect(snapshot.trap is TestTrap, true);
       },
     );
 
 void installation() => test(
       'Installation test',
       () {
-        final Pipe root = TestRecipe((_) => _).build();
+        final Pipe root = TestRecipe().build();
         root.install(
           PipeContext(
             current: root,
@@ -188,13 +170,14 @@ void installation() => test(
         expect(snapshot.flaskB!.isInstalled, true);
         expect(snapshot.bypassIn!.isInstalled, true);
         expect(snapshot.bypassOut!.isInstalled, true);
+        expect(snapshot.trap!.isInstalled, true);
       },
     );
 
 void uninstallation() => test(
       'Uninstallation test',
       () {
-        final Pipe root = TestRecipe((_) => _).build();
+        final Pipe root = TestRecipe().build();
         root.install(
           PipeContext(
             current: root,
@@ -210,17 +193,14 @@ void uninstallation() => test(
         expect(snapshot.flaskB!.isInstalled, false);
         expect(snapshot.bypassIn!.isInstalled, false);
         expect(snapshot.bypassOut!.isInstalled, false);
+        expect(snapshot.trap!.isInstalled, false);
       },
     );
 
 void processing() => test(
       'Ingredient processing test',
       () async {
-        final List<Ingredient> fromTrap = [];
-
-        final Pipe root = TestRecipe(
-          (ingredient) => fromTrap.add(ingredient),
-        ).build();
+        final Pipe root = TestRecipe().build();
         root.install(
           PipeContext(
             current: root,
@@ -232,6 +212,9 @@ void processing() => test(
         root.pass(MarkedIngredient(marker: 2));
 
         await Future.delayed(Duration(milliseconds: 10));
+
+        final List<Ingredient> fromTrap =
+            root.find<TestTrap>()?.prefer<BrewedTrap>()?.caught ?? [];
 
         expect(fromTrap.length, 3);
 
@@ -247,7 +230,7 @@ void processing() => test(
 void collection() => test(
       'Collection test',
       () async {
-        final Pipe root = TestRecipe((_) => _).build();
+        final Pipe root = TestRecipe().build();
         root.install(
           PipeContext(
             current: root,
