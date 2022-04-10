@@ -145,15 +145,12 @@ abstract class Flask extends Pipe {
     if (!isInstalled) throw StateError('Shall be installed first!');
   }
 
-  @protected
   P require<P extends Potion>() {
     if (potion is! P) throw StateError('Incorrect potion: $potion');
 
     return potion as P;
   }
 
-  @protected
-  @visibleForTesting
   P? prefer<P extends Potion>() {
     return potion is P ? potion as P : null;
   }
