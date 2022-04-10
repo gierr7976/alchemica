@@ -7,6 +7,7 @@ class BrewedTrap extends BrewedPotion {
     required this.caught,
   });
 
+  @override
   BrewedTrap copyWith({
     List<Ingredient>? caught,
   }) =>
