@@ -156,16 +156,12 @@ void presence() => test(
 void installation() => test(
       'Installation test',
       () {
-        final Pipe root = TestRecipe().build();
-        root.install(
-          PipeContext(
-            current: root,
-            bypassDispatcher: BypassDispatcher(),
-            fuseDispatcher: FuseDispatcher(),
-          ),
-        );
+        final Alchemist alchemist = Alchemist();
+        alchemist.buildFor(recipe: TestRecipe());
 
-        final TestRecipeSnapshot snapshot = TestRecipeSnapshot.from(root);
+        final TestRecipeSnapshot snapshot = TestRecipeSnapshot.from(
+          alchemist.root,
+        );
 
         expect(snapshot.flaskA!.isInstalled, true);
         expect(snapshot.flaskB!.isInstalled, true);
@@ -178,17 +174,13 @@ void installation() => test(
 void uninstallation() => test(
       'Uninstallation test',
       () {
-        final Pipe root = TestRecipe().build();
-        root.install(
-          PipeContext(
-            current: root,
-            bypassDispatcher: BypassDispatcher(),
-            fuseDispatcher: FuseDispatcher(),
-          ),
-        );
-        root.uninstall();
+        final Alchemist alchemist = Alchemist();
+        alchemist.buildFor(recipe: TestRecipe());
+        alchemist.uninstall();
 
-        final TestRecipeSnapshot snapshot = TestRecipeSnapshot.from(root);
+        final TestRecipeSnapshot snapshot = TestRecipeSnapshot.from(
+          alchemist.root,
+        );
 
         expect(snapshot.flaskA!.isInstalled, false);
         expect(snapshot.flaskB!.isInstalled, false);
@@ -201,21 +193,15 @@ void uninstallation() => test(
 void processing() => test(
       'Ingredient processing test',
       () async {
-        final Pipe root = TestRecipe().build();
-        root.install(
-          PipeContext(
-            current: root,
-            bypassDispatcher: BypassDispatcher(),
-            fuseDispatcher: FuseDispatcher(),
-          ),
-        );
+        final Alchemist alchemist = Alchemist();
+        alchemist.buildFor(recipe: TestRecipe());
 
-        root.pass(MarkedIngredient(marker: 2));
+        alchemist.add(MarkedIngredient(marker: 2));
 
         await Future(() => null);
 
         final List<Ingredient> fromTrap =
-            root.find<TestTrap>()?.prefer<BrewedTrap>()?.caught ?? [];
+            alchemist.prefer<TestTrap>()?.prefer<BrewedTrap>()?.caught ?? [];
 
         expect(fromTrap.length, 3);
 
@@ -231,20 +217,14 @@ void processing() => test(
 void collection() => test(
       'Collection test',
       () async {
-        final Pipe root = TestRecipe().build();
-        root.install(
-          PipeContext(
-            current: root,
-            bypassDispatcher: BypassDispatcher(),
-            fuseDispatcher: FuseDispatcher(),
-          ),
-        );
+        final Alchemist alchemist = Alchemist();
+        alchemist.buildFor(recipe: TestRecipe());
 
-        root.pass(MarkedIngredient(marker: 2));
+        alchemist.add(MarkedIngredient(marker: 2));
 
         await Future(() => null);
 
-        Map<Label, Potion> collection = root.collect();
+        Map<Label, Potion> collection = alchemist.root.collect();
 
         expect(collection[Label(1)] is MarkedPotion, true);
         expect(collection[Label(2)] is MarkedPotion, true);
@@ -256,31 +236,20 @@ void collection() => test(
 void preservation() => test(
       'Preservation test',
       () async {
-        final Pipe oldRoot = TestRecipe().build();
-        oldRoot.install(
-          PipeContext(
-            current: oldRoot,
-            bypassDispatcher: BypassDispatcher(),
-            fuseDispatcher: FuseDispatcher(),
-          ),
-        );
+        final Alchemist alchemist = Alchemist();
+        alchemist.buildFor(recipe: TestRecipe());
 
-        oldRoot.pass(MarkedIngredient(marker: 2));
+        alchemist.add(MarkedIngredient(marker: 2));
+
+        final Pipe oldRoot = alchemist.root;
 
         await Future(() => null);
 
-        final Pipe root = TestRecipe().build();
-        root.install(
-          PipeContext(
-            current: root,
-            bypassDispatcher: BypassDispatcher(),
-            fuseDispatcher: FuseDispatcher(),
-            preserved: oldRoot.collect(),
-          ),
-        );
+        alchemist.buildFor(recipe: TestRecipe());
 
-        final Map<Label, Potion> collection = root.collect();
+        final Map<Label, Potion> collection = alchemist.root.collect();
 
+        expect(identical(alchemist.root, oldRoot), false);
         expect(collection[Label(1)] is MarkedPotion, true);
         expect(collection[Label(2)] is MarkedPotion, true);
         expect(collection[Label(TestTrap)] is BrewedTrap, true);
