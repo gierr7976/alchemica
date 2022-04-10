@@ -26,8 +26,6 @@ class TestFlask extends ConnectedFlask {
 
   @override
   void usages() {
-    super.usages();
-
     use<MarkedIngredient>(onMarkedIngredient);
   }
 
