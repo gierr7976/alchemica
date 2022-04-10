@@ -7,10 +7,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v2
+      - name: Checking out repository
+        uses: actions/checkout@v2
+
+      - name: Preparing Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-      - run: flutter pub get
-      - run: flutter analyze
-      - run: flutter test
+
+      - name: Installing dependencies
+        run: flutter pub get
+
+      - name: Running lints
+        run: flutter analyze
+
+      - name: Running tests with coverage
+        run: flutter test --coverage
+
+      - name: Reporting code coverage
+        uses: zgosalvez/github-actions-report-lcov@v1
+        with:
+          coverage-files: coverage/lcov.info
+          minimum-coverage: 60
+          artifact-name: code-coverage-report
+          github-token: ${{ secrets.GITHUB_TOKEN }}
