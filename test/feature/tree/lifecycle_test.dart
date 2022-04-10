@@ -247,6 +247,7 @@ void collection() => test(
 
         expect(collection[Label(1)] is MarkedPotion, true);
         expect(collection[Label(2)] is MarkedPotion, true);
-        expect(collection.length, 2);
+        expect(collection[Label(TestTrap)] is BrewedTrap, true);
+        expect(collection.length, 3);
       },
     );
