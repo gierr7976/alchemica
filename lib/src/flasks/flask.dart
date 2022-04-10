@@ -42,7 +42,7 @@ abstract class Flask extends Pipe {
       fuse: context.fuseDispatcher.fuse,
     );
     _bloc!.install();
-    _bloc!.use(onDripped, null);
+    _bloc!.use<DrippedIngredient>(onDripped, null);
 
     _performers = [];
 
@@ -55,7 +55,6 @@ abstract class Flask extends Pipe {
   }
 
   @protected
-  @mustCallSuper
   void usages() {
     // Intentionally left blank
   }
