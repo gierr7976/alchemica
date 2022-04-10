@@ -9,11 +9,6 @@ class Trap extends ConnectedFlask {
           child: child,
         );
 
-  @override
-  void usages() {
-    use<Ingredient>(onIngredient);
-  }
-
   @protected
   Future<void> onIngredient(Ingredient ingredient, Emitter emit) async {
     final BrewedTrap? old = prefer();
