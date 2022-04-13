@@ -5,7 +5,7 @@ typedef PotionWidgetBuilder<P extends Potion?> = Widget Function(
   P potion,
 );
 
-typedef VialBuilder<P extends Potion?> = Vial<Potion> Function(
+typedef VialBuilder<P extends Potion?> = Vial<P> Function(
   BuildContext context,
   P potion,
 );
