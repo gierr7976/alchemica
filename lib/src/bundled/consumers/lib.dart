@@ -7,3 +7,4 @@ import 'package:flutter/widgets.dart';
 part 'rules/brewed.dart';
 part 'rules/mocked.dart';
 part 'common.dart';
+part 'rules/single.dart';
