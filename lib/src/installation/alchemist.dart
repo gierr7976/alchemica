@@ -33,6 +33,9 @@ class Alchemist {
     _root!.install(
       _makeContext(preserved),
     );
+
+    for (AlchemistIngredient ingredient in recipe.whenBuilt)
+      _root!.pass(ingredient);
   }
 
   PipeContext _makeContext(Map<Label, Potion>? preserved) => PipeContext(
