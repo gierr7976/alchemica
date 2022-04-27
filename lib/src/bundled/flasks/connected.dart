@@ -32,6 +32,9 @@ abstract class ConnectedFlask extends Flask {
     child?.pass(ingredient);
   }
 
+  @protected
+  void passInternal(Ingredient ingredient) => super.pass(ingredient);
+
   @override
   void uninstall() {
     child?.uninstall();
