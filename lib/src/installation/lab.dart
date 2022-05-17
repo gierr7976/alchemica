@@ -53,7 +53,7 @@ class LabState extends LabBaseState<Lab> {
   void initState() {
     super.initState();
 
-    buildRecipe();
+    buildRecipe(widget.recipe);
   }
 
   @override
@@ -61,7 +61,7 @@ class LabState extends LabBaseState<Lab> {
     super.didUpdateWidget(oldWidget);
 
     setState(
-      () => buildRecipe(),
+      () => buildRecipe(widget.recipe),
     );
   }
 
