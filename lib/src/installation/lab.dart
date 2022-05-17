@@ -44,7 +44,7 @@ class Lab extends StatefulWidget {
 }
 
 class LabState extends State<Lab> {
-  late final Alchemist _alchemist;
+  late final Alchemist _alchemist = Alchemist();
 
   P require<P extends Pipe>([Label? label]) => _alchemist.require(label);
 
@@ -56,11 +56,7 @@ class LabState extends State<Lab> {
   void initState() {
     super.initState();
 
-    _alchemist = Alchemist(
-      bypassDispatcher: widget.bypassDispatcher,
-      fuseDispatcher: widget.fuseDispatcher,
-    );
-    _alchemist.buildFor(recipe: widget.recipe);
+    buildRecipe();
   }
 
   @override
@@ -68,13 +64,17 @@ class LabState extends State<Lab> {
     super.didUpdateWidget(oldWidget);
 
     setState(
-      () => _alchemist.buildFor(
+      () => buildRecipe(),
+    );
+  }
+
+  @protected
+  @mustCallSuper
+  void buildRecipe() => _alchemist.build(
         recipe: widget.recipe,
         bypassDispatcher: widget.bypassDispatcher,
         fuseDispatcher: widget.fuseDispatcher,
-      ),
-    );
-  }
+      );
 
   @override
   Widget build(BuildContext context) => widget.child is Widget
