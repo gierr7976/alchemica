@@ -10,3 +10,4 @@ import 'package:flutter/widgets.dart';
 part 'recipe.dart';
 part 'lab.dart';
 part 'alchemist.dart';
+part 'lab_base.dart';

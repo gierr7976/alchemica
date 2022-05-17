@@ -1,30 +1,30 @@
 part of alchemica.installation;
 
+// ignore_for_file: deprecated_member_use_from_same_package
+
+@Deprecated('Will be removed after Q2 2022')
 typedef KeyWidgetBuilder = Widget Function(
   BuildContext context,
   GlobalKey<LabState> key,
 );
 
-class Lab extends StatefulWidget {
+class Lab extends LabBase {
   static LabState of(BuildContext context) =>
       context.findAncestorStateOfType()!;
 
   final Widget? child;
-  final KeyWidgetBuilder? builder;
-  final BypassDispatcher bypassDispatcher;
-  final FuseDispatcher fuseDispatcher;
-  final Recipe recipe;
 
-  Lab({
+  @Deprecated('Will be removed after Q2 2022')
+  final KeyWidgetBuilder? builder;
+
+  const Lab({
     Key? key,
-    required this.recipe,
     this.child,
     this.builder,
-    BypassDispatcher? bypassDispatcher,
+    required Recipe recipe,
     FuseDispatcher? fuseDispatcher,
-  })  : bypassDispatcher = bypassDispatcher ?? BypassDispatcher(),
-        fuseDispatcher = fuseDispatcher ?? FuseDispatcher(),
-        assert(
+    BypassDispatcher? bypassDispatcher,
+  })  : assert(
           (child is Widget) ^ (builder is KeyWidgetBuilder),
           'Either child or builder must be provided!',
         ),
@@ -37,21 +37,18 @@ class Lab extends StatefulWidget {
           Did you forgot to add this one?
           ''',
         ),
-        super(key: key);
+        super(
+          key: key,
+          recipe: recipe,
+          fuseDispatcher: fuseDispatcher,
+          bypassDispatcher: bypassDispatcher,
+        );
 
   @override
   State<StatefulWidget> createState() => LabState();
 }
 
-class LabState extends State<Lab> {
-  late final Alchemist _alchemist = Alchemist();
-
-  P require<P extends Pipe>([Label? label]) => _alchemist.require(label);
-
-  P? prefer<P extends Pipe>([Label? label]) => _alchemist.prefer(label);
-
-  void add(AlchemistIngredient ingredient) => _alchemist.add(ingredient);
-
+class LabState extends LabBaseState<Lab> {
   @override
   void initState() {
     super.initState();
@@ -67,14 +64,6 @@ class LabState extends State<Lab> {
       () => buildRecipe(),
     );
   }
-
-  @protected
-  @mustCallSuper
-  void buildRecipe() => _alchemist.build(
-        recipe: widget.recipe,
-        bypassDispatcher: widget.bypassDispatcher,
-        fuseDispatcher: widget.fuseDispatcher,
-      );
 
   @override
   Widget build(BuildContext context) => widget.child is Widget
