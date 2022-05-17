@@ -1,7 +1,13 @@
 part of alchemica.consumers;
 
+typedef LabExtractor<L extends LabState> = L Function(BuildContext context);
+
 abstract class Crane<F extends Flask> extends StatelessWidget {
+  static LabState _fallbackExtractor(BuildContext context) => Lab.of(context);
+
   final Label? label;
+
+  final LabExtractor? extractor;
 
   @protected
   bool get strict => true;
@@ -9,10 +15,12 @@ abstract class Crane<F extends Flask> extends StatelessWidget {
   const Crane({
     Key? key,
     this.label,
+    this.extractor,
   }) : super(key: key);
 
   F? getFlask(BuildContext context) {
-    final LabState lab = Lab.of(context);
+    final LabState lab =
+        extractor?.call(context) ?? _fallbackExtractor(context);
 
     if (strict) return lab.require(label);
     return lab.prefer(label);
@@ -26,8 +34,7 @@ abstract class Crane<F extends Flask> extends StatelessWidget {
   Widget build(BuildContext context) {
     final F? flask = getFlask(context);
 
-    if (flask is F)
-      return buildWithFlask(context, flask);
+    if (flask is F) return buildWithFlask(context, flask);
     return buildWithoutFlask(context);
   }
 }
