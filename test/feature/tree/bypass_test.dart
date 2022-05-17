@@ -76,10 +76,10 @@ void normal() => test(
         final BypassDispatcher dispatcher = BypassDispatcher();
 
         final Alchemist alchemistA = Alchemist(bypassDispatcher: dispatcher);
-        alchemistA.buildFor(recipe: TestRecipeA());
+        alchemistA.build(recipe: TestRecipeA());
 
         final Alchemist alchemistB = Alchemist(bypassDispatcher: dispatcher);
-        alchemistB.buildFor(recipe: TestRecipeB());
+        alchemistB.build(recipe: TestRecipeB());
 
         alchemistA.add(MarkedIngredient(1));
         alchemistA.add(StrangeIngredient());
@@ -100,10 +100,10 @@ void dublicate() => test(
         final BypassDispatcher dispatcher = BypassDispatcher();
 
         final Alchemist alchemistA = Alchemist(bypassDispatcher: dispatcher);
-        alchemistA.buildFor(recipe: TestRecipeA());
+        alchemistA.build(recipe: TestRecipeA());
 
         final Alchemist alchemistB = Alchemist(bypassDispatcher: dispatcher);
-        alchemistB.buildFor(recipe: TestRecipeB());
+        alchemistB.build(recipe: TestRecipeB());
 
         final MarkedIngredient ingredient = MarkedIngredient(1);
         alchemistA.add(ingredient);
@@ -135,7 +135,7 @@ void internal() => test(
       'Internal injection test',
       () async {
         final Alchemist alchemist = Alchemist();
-        alchemist.buildFor(recipe: LoopedRecipe());
+        alchemist.build(recipe: LoopedRecipe());
 
         alchemist.require<BypassIn>(Label(1)).pass(MarkedIngredient(1));
 
@@ -153,7 +153,7 @@ void external() => test(
       'External injection test',
       () async {
         final Alchemist alchemist = Alchemist();
-        alchemist.buildFor(recipe: LoopedRecipe());
+        alchemist.build(recipe: LoopedRecipe());
 
         alchemist.add(MarkedIngredient(1));
 

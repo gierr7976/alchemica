@@ -20,7 +20,7 @@ class Alchemist {
 
   //<editor-fold desc="Build methods">
 
-  void buildFor({
+  void build({
     required Recipe recipe,
     BypassDispatcher? bypassDispatcher,
     FuseDispatcher? fuseDispatcher,
