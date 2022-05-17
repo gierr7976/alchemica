@@ -24,7 +24,13 @@ class Indicator<F extends Flask> extends Crane<F> {
     required this.child,
     this.strict = true,
     this.processors = const [],
-  }) : super(key: key);
+    Label? label,
+    LabExtractor? extractor,
+  }) : super(
+          key: key,
+          label: label,
+          extractor: extractor,
+        );
 
   @override
   Widget buildWithFlask(BuildContext context, F flask) =>
