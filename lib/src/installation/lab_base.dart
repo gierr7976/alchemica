@@ -27,11 +27,13 @@ abstract class LabBaseState<L extends LabBase> extends State<L> {
 
   @protected
   @mustCallSuper
-  void buildRecipe() => _alchemist.build(
-        recipe: widget.recipe,
-        bypassDispatcher: widget.bypassDispatcher,
-        fuseDispatcher: widget.fuseDispatcher,
-      );
+  void buildRecipe([Recipe? recipe]) => recipe is Recipe
+      ? _alchemist.build(
+          recipe: recipe,
+          bypassDispatcher: widget.bypassDispatcher,
+          fuseDispatcher: widget.fuseDispatcher,
+        )
+      : _alchemist.uninstall();
 
   @override
   void dispose() {
