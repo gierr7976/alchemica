@@ -12,9 +12,11 @@ class Pourer<F extends Flask> extends Crane<F> {
     Label? label,
     required this.rule,
     this.onMissing,
+    LabExtractor? extractor,
   }) : super(
           key: key,
           label: label,
+          extractor: extractor,
         );
 
   @override
