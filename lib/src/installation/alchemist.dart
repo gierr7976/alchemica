@@ -83,5 +83,6 @@ class Alchemist {
 
   void uninstall() {
     _root?.uninstall();
+    _root = null;
   }
 }
