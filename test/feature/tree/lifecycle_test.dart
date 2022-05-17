@@ -157,7 +157,7 @@ void installation() => test(
       'Installation test',
       () {
         final Alchemist alchemist = Alchemist();
-        alchemist.buildFor(recipe: TestRecipe());
+        alchemist.build(recipe: TestRecipe());
 
         final TestRecipeSnapshot snapshot = TestRecipeSnapshot.from(
           alchemist.root,
@@ -175,7 +175,7 @@ void uninstallation() => test(
       'Uninstallation test',
       () {
         final Alchemist alchemist = Alchemist();
-        alchemist.buildFor(recipe: TestRecipe());
+        alchemist.build(recipe: TestRecipe());
         alchemist.uninstall();
 
         final TestRecipeSnapshot snapshot = TestRecipeSnapshot.from(
@@ -194,7 +194,7 @@ void processing() => test(
       'Ingredient processing test',
       () async {
         final Alchemist alchemist = Alchemist();
-        alchemist.buildFor(recipe: TestRecipe());
+        alchemist.build(recipe: TestRecipe());
 
         alchemist.add(MarkedIngredient(marker: 2));
 
@@ -218,7 +218,7 @@ void collection() => test(
       'Collection test',
       () async {
         final Alchemist alchemist = Alchemist();
-        alchemist.buildFor(recipe: TestRecipe());
+        alchemist.build(recipe: TestRecipe());
 
         alchemist.add(MarkedIngredient(marker: 2));
 
@@ -237,7 +237,7 @@ void preservation() => test(
       'Preservation test',
       () async {
         final Alchemist alchemist = Alchemist();
-        alchemist.buildFor(recipe: TestRecipe());
+        alchemist.build(recipe: TestRecipe());
 
         alchemist.add(MarkedIngredient(marker: 2));
 
@@ -245,7 +245,7 @@ void preservation() => test(
 
         await Future(() => null);
 
-        alchemist.buildFor(recipe: TestRecipe());
+        alchemist.build(recipe: TestRecipe());
 
         final Map<Label, Potion> collection = alchemist.root.collect();
 
