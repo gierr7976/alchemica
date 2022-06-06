@@ -1,9 +1,9 @@
 part of alchemica.bundled.consumers;
 
 class BrewedRule<B extends BrewedPotion> extends Rule {
-  final VialBuilder<B> brewed;
-  final VialBuilder<UnderbrewedPotion> underbrewed;
-  final VialBuilder<PoisonedPotion> poisoned;
+  final PotionWidgetBuilder<B> brewed;
+  final PotionWidgetBuilder<UnderbrewedPotion> underbrewed;
+  final PotionWidgetBuilder<PoisonedPotion> poisoned;
 
   BrewedRule({
     required this.brewed,
@@ -12,13 +12,13 @@ class BrewedRule<B extends BrewedPotion> extends Rule {
   });
 
   @override
-  Vial<Potion?> map(BuildContext context, Potion potion) {
+  Widget map(BuildContext context, Potion potion) {
     if (potion is B) return brewed(context, potion);
 
     if (potion is UnderbrewedPotion) return underbrewed(context, potion);
 
     if (potion is PoisonedPotion) return poisoned(context, potion);
 
-    return onUnknown(context, potion);
+    return unknown(context, potion);
   }
 }

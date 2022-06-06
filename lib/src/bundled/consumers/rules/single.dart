@@ -1,8 +1,8 @@
 part of alchemica.bundled.consumers;
 
 class SingleRule<P extends Potion> extends Rule {
-  final VialBuilder<P> builder;
-  final VialBuilder? fallback;
+  final PotionWidgetBuilder<P> builder;
+  final PotionWidgetBuilder? fallback;
 
   SingleRule({
     required this.builder,
@@ -10,20 +10,13 @@ class SingleRule<P extends Potion> extends Rule {
   });
 
   @override
-  Vial<Potion?> map(BuildContext context, Potion potion) {
+  Widget map(BuildContext context, Potion potion) {
     if (potion is P) return builder(context, potion);
 
-    return fallback?.call(context, potion) ?? VoidVial(potion: potion);
+    return unknown(context, potion);
   }
-}
-
-class VoidVial extends Vial {
-  const VoidVial({Key? key, required Potion? potion})
-      : super(
-          key: key,
-          potion: potion,
-        );
 
   @override
-  Widget build(BuildContext context) => SizedBox();
+  Widget unknown(BuildContext context, Potion potion) =>
+      fallback?.call(context, potion) ?? SizedBox();
 }

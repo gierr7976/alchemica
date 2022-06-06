@@ -1,13 +1,16 @@
 part of alchemica.consumers;
 
 abstract class Rule {
-  Vial map(BuildContext context, Potion potion);
+  Widget map(BuildContext context, Potion potion);
 
-  Vial onUnknown(BuildContext context, Potion potion) =>
-      throw StateError(
-        '''
+  Widget unknown(BuildContext context, Potion potion) => throw StateError('''
         Unknown potion: $potion\n
         Did you forgot to map this one?
-        '''
-      );
+        ''');
+
+  @Deprecated('Use unknown instead')
+  Vial onUnknown(BuildContext context, Potion potion) => throw StateError('''
+        Unknown potion: $potion\n
+        Did you forgot to map this one?
+        ''');
 }
