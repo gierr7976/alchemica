@@ -176,11 +176,12 @@ void uninstallation() => test(
       () {
         final Alchemist alchemist = Alchemist();
         alchemist.build(recipe: TestRecipe());
-        alchemist.uninstall();
 
         final TestRecipeSnapshot snapshot = TestRecipeSnapshot.from(
           alchemist.root,
         );
+
+        alchemist.uninstall();
 
         expect(snapshot.flaskA!.isInstalled, false);
         expect(snapshot.flaskB!.isInstalled, false);
