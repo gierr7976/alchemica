@@ -5,6 +5,7 @@ typedef PotionWidgetBuilder<P extends Potion?> = Widget Function(
   P potion,
 );
 
+@Deprecated('Use PotionWidgetBuilder instead')
 typedef VialBuilder<P extends Potion?> = Vial<P> Function(
   BuildContext context,
   P potion,
